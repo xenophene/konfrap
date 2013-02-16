@@ -1,0 +1,114 @@
+<?php
+
+class User_model extends CI_Model {
+  public function __construct() {
+    $this->load->database();
+  }
+  
+  
+  public function get_users() {
+    $query = $this->db->get('users');
+    return $query->result_array();
+  }
+  /**
+   * Must supply an fbid. If not, redirect to user's home page
+  */
+  public function get_by_fbid($id = null) {
+    if ($id === null) {
+      return array();
+    }
+    $query = $this->db->get_where('users', array('fbid' => $id));
+    return $query->row_array();
+  }
+  
+  /**
+   * Must supply a uid. If not, redirect to user's home page
+   */
+  public function get_by_uid($id = null) {
+    if ($id === null) {
+      return array();
+    }
+    $query = $this->db->get_where('users', array('id' => $id));
+    return $query->row_array();
+  }
+  
+  public function get_interests($id = null) {
+    if ($id === null) {
+      return array();
+    }
+    $query = $this->db->get_where('user_interests', array('uid' => $id));
+    $interests = array();
+    foreach ($query->result_array() as $row) {
+      array_push($interests, $row['val']);
+    }
+    return $interests;
+  }
+  
+  /**
+   * Returns the followers of a user with fbid id
+   */
+  public function get_followers($id = null) {
+    if ($id === null) {
+      return array();
+    }
+    $query = $this->db->get_where('user_followers', array('followee' =>  $id));
+    $followers = array();
+    foreach ($query->result_array() as $row) {
+      array_push($followers, $row['follower']);
+    }
+    return $followers;
+  }
+  
+  public function set_follower($follower = null, $followee = null) {
+    if ($follower === null or $followee === null) {
+      return false;
+    }
+    $data = array(
+              'follower'    =>  $follower,
+              'followee'    =>  $followee
+            );
+    $query = $this->db->get_where('user_followers', $data);
+    if ( ! $query->num_rows()) {
+      $this->db->insert('user_followers', $data);
+    } else if ($query->num_rows() > 1) {
+      echo 'ERROR';
+    }
+  }
+  public function rem_follower($follower = null, $followee = null) {
+    $data = array(
+              'follower'    =>  $follower,
+              'followee'    =>  $followee
+            );
+    $query = $this->db->delete('user_followers', $data);
+  }
+  
+  /**
+   * Returns the followees of a user with fbid id
+   */
+  public function get_followees($id = null) {
+    if ($id === null) {
+      return array();
+    }
+    $query = $this->db->get_where('user_followers', array('follower' =>  $id));
+    $followees = array();
+    foreach ($query->result_array() as $row) {
+      array_push($followees, $row['followee']);
+    }
+    return $followees;
+  }
+  /**
+   * add user based on fb log in credentials
+   */
+  public function add_user($fb = null) {
+    if ($fb === null) {
+      return false;
+    }
+    
+    $data = array(
+      'fbid'    =>  $fb['fbid'],
+      'name'    =>  $fb['me']['name']
+    );
+    $query = $this->db->insert('users', $data);
+    return $this->db->insert_id();
+  }
+}

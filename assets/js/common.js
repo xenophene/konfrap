@@ -63,7 +63,7 @@ function searchSetup() {
       console.log(sname);
       var i = $.inArray(sname, names);
       if (i != -1) {
-        if (searchtypes[i] == 'u') window.location = 'home.php?uid=' + uids[i];
+        if (searchtypes[i] == 'u') window.location = '/confrap/user/home/' + uids[i] + '/2';
         else  window.location = 'debate.php?debid=' + uids[i];
       }
       return false;
@@ -72,7 +72,7 @@ function searchSetup() {
   $('.icon-search').click(function() {
     var sname = $(this).parent().children('input').val();
     var i = $.inArray(sname, names);
-    if (i != -1) window.location = 'home.php?uid=' + uids[i];
+    if (i != -1) window.location = '/confrap/user/home/' + uids[i] + '/2';
     else $(this).parent().children('input').val('');
   });
   

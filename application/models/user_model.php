@@ -118,7 +118,8 @@ class User_model extends CI_Model {
     $data = array(
       'fbid'    =>  $fb['fbid'],
       'name'    =>  $fb['me']['name'],
-      'url'     =>  $url
+      'url'     =>  $url,
+      'score'   =>  0
     );
     
     $query = $this->db->get_where('users', array('url'  =>  $url));

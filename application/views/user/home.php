@@ -1,5 +1,5 @@
 <div id="profile">
-  <a href="<?php echo 'user/home/'. $user_profile['fbid']; ?>">
+  <a href="<?php echo '/confrap/user/home/'. url_title($user_profile['name']); ?>">
     <img class="pic" src="<?php echo '//graph.facebook.com/'. $user_profile['fbid'] .'/picture?type=normal';?>"/>
   </a>
   <table class="name-table">

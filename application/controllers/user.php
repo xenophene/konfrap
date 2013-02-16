@@ -30,27 +30,26 @@ class User extends CI_Controller {
    * Displays the home page of the user, provided already authorized. If not,
    * redirect to index page
    */
-  public function home($id = null, $use_fb = "true") {
+  public function home($id = null, $use_fb = "0") {
     $fb = $this->session->userdata('fb');
     $signed_in = ($fb['me'] != null) and $fb['fbid'];
     if ( ! $signed_in and $id === null) { /* neither signed in nor asking for a user - REDIRECT */
       redirect('user/index');
     } else if ($signed_in and $id === null) { /* signed in and asking for own page */
       $id = $fb['me']['id'];
+      $use_fb = "1";
     }
-    if ($use_fb === "true") {
+    if ($use_fb === "0") {
+      $user = $this->user_model->get_by_url($id);
+    } else if ($use_fb === "1") {
       $user = $this->user_model->get_by_fbid($id);
     } else {
       $user = $this->user_model->get_by_uid($id);
     }
     if (empty($user)) {
       if ($signed_in) { /* add entry to the db */
-        $new_id = $this->user_model->add_user($fb);
-        $user = array(
-          'name'  =>  $fb['me']['name'],
-          'fbid'  =>  $fb['fbid'],
-          'id'    =>  $new_id
-        );
+        $user = $this->user_model->add_user($fb);
+        
       } else {
         redirect('user/index');
       }

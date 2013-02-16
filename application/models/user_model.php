@@ -10,6 +10,14 @@ class User_model extends CI_Model {
     $query = $this->db->get('users');
     return $query->result_array();
   }
+  
+  public function get_by_url($id = null) {
+    if ($id === null) {
+      return array();
+    }
+    $query = $this->db->get_where('users', array('url'  =>  $id));
+    return $query->row_array();
+  }
   /**
    * Must supply an fbid. If not, redirect to user's home page
   */
@@ -100,15 +108,35 @@ class User_model extends CI_Model {
    * add user based on fb log in credentials
    */
   public function add_user($fb = null) {
+    $this->load->helper('url');
+    $this->load->helper('string');
     if ($fb === null) {
       return false;
     }
     
+    $url = url_title($fb['me']['name']);
     $data = array(
       'fbid'    =>  $fb['fbid'],
-      'name'    =>  $fb['me']['name']
+      'name'    =>  $fb['me']['name'],
+      'url'     =>  $url
     );
-    $query = $this->db->insert('users', $data);
-    return $this->db->insert_id();
+    
+    $query = $this->db->get_where('users', array('url'  =>  $url));
+    if ($query->num_rows() > 0) {
+      $url = $url . '-' . $id;
+      $data['url'] = random_string('alnum', 16);
+      $query = $this->db->insert('users', $data);
+      $id = $this->db->insert_id();
+      $where = array('id'  =>  $id);
+      $url_data = array('url' =>  $url);
+      
+      $query = $this->db->update('users', $url_data, $where);
+    } else {
+      $query = $this->db->insert('users', $data);
+      $id = $this->db->insert_id();
+    }
+    $data['id'] = $id;
+    return $data;
   }
+  
 }

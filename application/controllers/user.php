@@ -72,19 +72,23 @@ class User extends CI_Controller {
   }
   
   /**
-   * Follow or unfollow the user derived from the input post data
+   * Follow the user derived from the input post data
    */
   public function follow() {
     $follower = $this->input->get('follower');
     $followee = $this->input->get('followee');
-    $follow = $this->input->get('follow');
     $fb = $this->session->userdata('fb');
     if ($fb['fbid'] === $follower) {
-      if ($follow === "1") {
-        $this->user_model->set_follower($follower, $followee);
-      } else {
-        $this->user_model->rem_follower($follower, $followee);
-      }
+      $this->user_model->set_follower($follower, $followee);
+    }
+  }
+  
+  public function unfollow() {
+    $follower = $this->input->get('follower');
+    $followee = $this->input->get('followee');
+    $fb = $this->session->userdata('fb');
+    if ($fb['fbid'] === $follower) {
+      $this->user_model->rem_follower($follower, $followee);
     }
   }
   
@@ -101,6 +105,26 @@ class User extends CI_Controller {
     }
     echo json_encode($response);
   }
+  
+  public function add_interest() {
+    $uid = $this->input->get('uid');
+    $val = $this->input->get('val');
+    $fb = $this->session->userdata('fb');
+    echo $this->user_model->get_fbid_from_uid($uid);
+    if ($fb['fbid'] === $this->user_model->get_fbid_from_uid($uid)) {
+      $this->user_model->set_interest($uid, $val);
+    }
+  }
+  
+  public function rem_interest() {
+    $uid = $this->input->get('uid');
+    $val = $this->input->get('val');
+    $fb = $this->session->userdata('fb');
+    if ($fb['fbid'] === $this->user_model->get_fbid_from_uid($uid)) {
+      $this->user_model->unset_interest($uid, $val);
+    }
+  }
+  
   /**
    * Redirects the page to facebook login
    */

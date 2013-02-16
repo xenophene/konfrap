@@ -5,6 +5,26 @@ class User_model extends CI_Model {
     $this->load->database();
   }
   
+  public function get_fbid_from_uid($uid) {
+    $query = $this->db->get_where('users', array('id' =>  $uid));
+    $row = $query->row_array();
+    if (isset($row['fbid'])) {
+      return $row['fbid'];
+    } else {
+      return 0;
+    }
+  }
+  
+  public function get_uid_from_fbid($fbid) {
+    $query = $this->db->get_where('users', array('fbid' =>  $fbid));
+    $row = $query->row_array();
+    if (isset($row['id'])) {
+      return $row['id'];
+    } else {
+      return 0;
+    }
+  }
+  
   
   public function get_users() {
     $query = $this->db->get('users');
@@ -75,12 +95,7 @@ class User_model extends CI_Model {
               'follower'    =>  $follower,
               'followee'    =>  $followee
             );
-    $query = $this->db->get_where('user_followers', $data);
-    if ( ! $query->num_rows()) {
-      $this->db->insert('user_followers', $data);
-    } else if ($query->num_rows() > 1) {
-      echo 'ERROR';
-    }
+    $this->db->insert('user_followers', $data);
   }
   public function rem_follower($follower = null, $followee = null) {
     $data = array(
@@ -138,6 +153,21 @@ class User_model extends CI_Model {
     }
     $data['id'] = $id;
     return $data;
+  }
+  
+  public function set_interest($uid, $val) {
+    $data = array(
+              'uid'   =>  $uid,
+              'val'   =>  $val
+            );
+    $query = $this->db->insert('user_interests', $data);
+  }
+  public function unset_interest($uid, $val) {
+    $data = array(
+              'uid'   =>  $uid,
+              'val'   =>  $val
+            );
+    $query = $this->db->delete('user_interests', $data);
   }
   
 }

@@ -229,4 +229,5 @@ function setUpFeedback() {
 $(function () {
   addDivider();
   //setUpFeedback();
+  $('.tip').each(function() {$(this).tooltip(); });
 });

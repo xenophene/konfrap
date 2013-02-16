@@ -176,12 +176,11 @@ function auxFollowUser(elmt, oldClassName, newClassName, fCode, htmlCode) {
   elmt.html(htmlCode);
   /* send follow AJAX request */
   $.ajax({
-    url: '/confrap/user/follow',
+    url: '/confrap/user/' + fCode,
     type: 'GET',
     data: {
       'follower': myfbid,
-      'followee': ufbid,
-      'follow': fCode
+      'followee': ufbid
     },
 		success: function (d) {
 			console.log(d);
@@ -190,10 +189,10 @@ function auxFollowUser(elmt, oldClassName, newClassName, fCode, htmlCode) {
 }
 function followUser () {
   if ($(this).hasClass('btn-primary')) {
-    auxFollowUser($(this), 'btn-primary', 'btn-danger', 1, 'Unfollow');
+    auxFollowUser($(this), 'btn-primary', 'btn-danger', 'follow', 'Unfollow');
   }
   else {
-    auxFollowUser($(this), 'btn-danger', 'btn-primary', 0, 'Follow');
+    auxFollowUser($(this), 'btn-danger', 'btn-primary', 'unfollow', 'Follow');
   }
 }
 
@@ -397,6 +396,38 @@ function setEditable() {
 		});
 	});
 }
+function setUpInterests() {
+	$('#interest-tags').tagit({
+		readOnly: ufbid !== myfbid,
+		removeConfirmation: true,
+		allowSpaces: true,
+		placeholderText: 'add interests...',
+		afterTagAdded: function (evt, ui) {
+			if (!ui.duringInitialization) {
+				$.ajax({
+					url: '/confrap/user/add_interest',
+					data: {
+						'uid': uuid,
+						'val': ui.tagLabel
+					},
+					success: function (d) {
+					}
+				});
+			}
+		},
+		afterTagRemoved: function (evt, ui) {
+			if (!ui.duringInitialization) {
+				$.ajax({
+					url: '/confrap/user/rem_interest',
+					data: {
+						'uid': uuid,
+						'val': ui.tagLabel
+					}
+				});
+			}
+		}
+	});
+}
 $(function() {
   clearDebateForm();
   $('#start').click(defineDebate);
@@ -417,4 +448,5 @@ $(function() {
   popovers();
   searchSetup();
 	setEditable();
+	setUpInterests();
 });

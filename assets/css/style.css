@@ -130,10 +130,17 @@ span.emph {
 #profile span.add .interest-confirm, .interest-reject {
   cursor: pointer;
 }
-td.interest-elements {
-  padding-right: 8px;
+.interest-elements {
+  padding: 0 8px 0 0;
   font-size: 14px;
-  max-width: 500px;
+  max-width: 400px;
+  margin: 0;
+  
+}
+#interest-tags {
+}
+td.interest-elements>ul {
+  margin: 0;
 }
 td.debate-score {
   font-size: 14px;

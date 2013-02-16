@@ -16,4 +16,6 @@ echo meta($meta);
 
 echo link_tag('/assets/css/bootstrap.min.css');
 echo link_tag('/assets/css/style.css');
+echo link_tag('/assets/css/jquery.tagit.css');
+echo link_tag('/assets/css/tagit.ui-zendesk.css');
 echo link_tag('/assets/ico/favicon.ico', 'shortcut icon', 'image/ico');

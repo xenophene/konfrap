@@ -11,10 +11,23 @@
     <tbody>
       <tr>
         <td class="contain-interest"><span id="interested-in" class="interest">interested in:</span></td>
-        <?php $editable = $me ? 'editable' : '';?>
-        <td name="<?php echo $user_profile['fbid'];?>" class="interest-elements <?php echo $editable;?>">
-          <?php echo implode(',', $interests); ?>
+        <td name="<?php echo $user_profile['fbid'];?>" class="interest-elements">
+        <?php
+          $id = $me ? 'interest-tags' : '';
+          $class = $me ? '' : 'tagit ui-widget ui-widget-content ui-corner-all';
+        ?>
+          <ul title="Interest Tags" id="<?php echo $id;?>" class="<?php echo $class;?>">
+            <?php foreach ($interests as $interest): ?>
+            <li class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-read-only">
+              <span class="tagit-label"><?php echo $interest; ?></span>
+            </li>
+            <?php endforeach; ?>
+            <?php if (empty($interests) and !$me): ?>
+            <em>no interests added</em>
+            <?php endif; ?>
+          </ul>
         </td>
+        <!--<td><ul id="interest-tags"></ul></td>-->
       </tr>
       <tr>
         <td><span id="debating-points" class="interest">debating points:</span></td>

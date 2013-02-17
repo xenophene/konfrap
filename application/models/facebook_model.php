@@ -19,7 +19,9 @@ class Facebook_model extends CI_Model {
       'me'        =>  $user_profile,
       'fbid'      =>  $user,
       'loginUrl'  =>  $this->facebook->getLoginUrl(),
-      'logoutUrl' =>  $this->facebook->getLogoutUrl()
+      'logoutUrl' =>  $this->facebook->getLogoutUrl(array(
+                                                      'next'  =>  DOMAIN
+                                                    ))
     );
     
     $this->session->set_userdata('fb', $fb);

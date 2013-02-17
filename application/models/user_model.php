@@ -139,10 +139,11 @@ class User_model extends CI_Model {
     
     $query = $this->db->get_where('users', array('url'  =>  $url));
     if ($query->num_rows() > 0) {
-      $url = $url . '-' . $id;
+      
       $data['url'] = random_string('alnum', 16);
       $query = $this->db->insert('users', $data);
       $id = $this->db->insert_id();
+      $url = $url . '-' . $id;
       $where = array('id'  =>  $id);
       $url_data = array('url' =>  $url);
       

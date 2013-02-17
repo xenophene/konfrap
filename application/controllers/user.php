@@ -10,7 +10,6 @@ class User extends CI_Controller {
     $this->load->model('user_model');
     $this->load->helper('url');
     $this->load->helper('html');
-    $this->load->library('javascript');
   }
   
   /**
@@ -37,12 +36,11 @@ class User extends CI_Controller {
       redirect('user/index');
     } else if ($signed_in and $id === null) { /* signed in and asking for own page */
       $id = $fb['me']['id'];
-      $use_fb = "1";
     }
     if ($use_fb === "0") {
-      $user = $this->user_model->get_by_url($id);
-    } else if ($use_fb === "1") {
       $user = $this->user_model->get_by_fbid($id);
+    } else if ($use_fb === "1") {
+      $user = $this->user_model->get_by_url($id);
     } else {
       $user = $this->user_model->get_by_uid($id);
     }
@@ -110,7 +108,6 @@ class User extends CI_Controller {
     $uid = $this->input->get('uid');
     $val = $this->input->get('val');
     $fb = $this->session->userdata('fb');
-    echo $this->user_model->get_fbid_from_uid($uid);
     if ($fb['fbid'] === $this->user_model->get_fbid_from_uid($uid)) {
       $this->user_model->set_interest($uid, $val);
     }

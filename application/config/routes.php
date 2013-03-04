@@ -39,8 +39,20 @@
 */
 $route['user'] = 'user/home';
 $route['user/follow'] = 'user/follow';
+$route['user/unfollow'] = 'user/unfollow';
+$route['user/all'] = 'user/all';
+$route['user/remove_interest'] = 'user/remove_interest';
+$route['user/add_interest'] = 'user/add_interest';
+$route['user/login'] = 'user/login';
+$route['user/logout'] = 'user/logout';
 $route['user/home/(:any)'] = 'user/home/$1';
+
 $route['debate/home/(:any)'] = 'debate/home/$1';
+
+$route['contact/feedback'] = 'contact/feedback';
+$route['contact/join_us'] = 'contact/join_us';
+$route['contact/about'] = 'contact/about';
+
 $route['default_controller'] = 'user/home';
 
 /* End of file routes.php */

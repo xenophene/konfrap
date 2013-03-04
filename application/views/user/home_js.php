@@ -10,10 +10,10 @@
   ";
 ?>
 </script>
-<script src="/confrap/assets/js/jquery-1.7.2.min.js"></script>
-<script src="/confrap/assets/js/bootstrap.min.js"></script>
-<script src="/confrap/assets/js/jquery-ui-min.js"></script>
-<script src="/confrap/assets/js/jquery.editinplace.js"></script>
-<script src="/confrap/assets/js/tag-it-min.js"></script>
-<script src="/confrap/assets/js/common.js"></script>
-<script src="/confrap/assets/js/home.js"></script>
+<script src="/konfrap/assets/js/jquery-1.7.2.min.js"></script>
+<script src="/konfrap/assets/js/bootstrap.min.js"></script>
+<script src="/konfrap/assets/js/jquery-ui-min.js"></script>
+<script src="/konfrap/assets/js/jquery.editinplace.js"></script>
+<script src="/konfrap/assets/js/tag-it-min.js"></script>
+<script src="/konfrap/assets/js/common.js"></script>
+<script src="/konfrap/assets/js/home.js"></script>

@@ -11,7 +11,7 @@ $meta = array(
 echo meta($meta);
 ?>
 
-<title><?php echo $name; ?> | Confrap</title>
+<title><?php echo $name; ?> | Konfrap</title>
 <?php
 
 echo link_tag('/assets/css/bootstrap.min.css');

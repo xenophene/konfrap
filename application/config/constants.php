@@ -41,7 +41,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 / Custom constants
 /---------------------------------------------------------------------------
 */
-define('DOMAIN', 'http://localhost/confrap');
+define('DOMAIN', 'http://localhost/konfrap');
 
 
 /* End of file constants.php */

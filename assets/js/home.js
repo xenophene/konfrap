@@ -35,15 +35,8 @@ function defineDebate() {
      exist in our db, we need to somehow intimate that person */
   if (friendNames == null) {
     $.ajax({
-      url: 'includes/ajax_scripts.php',
-      type: 'POST',
-      data: {
-        'fid' : 2
-      },
+      url: '/konfrap/user/my_friends',
       dataType: 'json',
-      error: function (msg) {
-        console.log(msg);
-      },
       success: function(data) {
         var result = data;
         var names = Array();
@@ -53,29 +46,29 @@ function defineDebate() {
           ids.push(result.data[i].id);
         }
         $( "#participants").autocomplete({
-	  minLength: 3,
-	  source: function( request, response ) {
-	    // delegate back to autocomplete, but extract the last term
-	    response( $.ui.autocomplete.filter(
-		    names, extractLast( request.term ) ) );
-	  },
-	  focus: function() {
-		  // prevent value inserted on focus
-		  return false;
-	  },
-	  select: function( event, ui ) {
-		  var terms = split( this.value );
-		  // remove the current input
-		  terms.pop();
-		  // add the selected item
-		  terms.push( ui.item.value );
-		  // add placeholder to get the comma-and-space at the end
-		  terms.push( "" );
-		  this.value = terms.join( ", " );
-		  return false;
-	  },
-	  maxResults: 4
-	});
+					minLength: 3,
+					source: function( request, response ) {
+						// delegate back to autocomplete, but extract the last term
+						response( $.ui.autocomplete.filter(
+							names, extractLast( request.term ) ) );
+					},
+					focus: function() {
+						// prevent value inserted on focus
+						return false;
+					},
+					select: function( event, ui ) {
+						var terms = split( this.value );
+						// remove the current input
+						terms.pop();
+						// add the selected item
+						terms.push( ui.item.value );
+						// add placeholder to get the comma-and-space at the end
+						terms.push( "" );
+						this.value = terms.join( ", " );
+						return false;
+					},
+					maxResults: 4
+				});
         friendNames = names;
         friendIds = ids;
       }
@@ -176,7 +169,7 @@ function auxFollowUser(elmt, oldClassName, newClassName, fCode, htmlCode) {
   elmt.html(htmlCode);
   /* send follow AJAX request */
   $.ajax({
-    url: '/confrap/user/' + fCode,
+    url: '/konfrap/user/' + fCode,
     type: 'GET',
     data: {
       'follower': myfbid,
@@ -202,50 +195,7 @@ function clearDebateForm() {
   $('#debate-theme').val('');
   $('#participants').val('');
 }
-/* modify the my debating interests using tag-it helper js */
-function reShowAddButton(interests) {
-  $('.interest-confirm').tooltip('hide');
-  $('.interest-reject').tooltip('hide');
-  $('.interest-confirm').unbind();
-  $('.interest-reject').unbind();
-  $('.interest-elements-p').html('<span class="add">+</span>');
-  $('.interest-elements').html(interests);
-  $('.interest-elements').effect("highlight", {}, 3000);
-  $('span.add').click(modifyInterests);
-  $('.add').tooltip({
-    title: 'Modify/Add Debating interests'
-  });
-}
-function modifyInterests() {
-  var interests = $('.interest-elements').html();
-  $(this).html('');
-  $('.interest-elements').html('');
-  $('.add').tooltip('hide');
-  $('.add').unbind();
-  $(this).append('<span title="Confirm" class="interest-confirm icon-ok" style="margin:4px 0 0 4px;padding:0 4px 0 4px;"></span>');
-  $(this).append('<span title="Reject" class="interest-reject icon-remove" style="margin:4px 0;padding:0 4px 0 4px;"></span>');
-  $('.interest-elements').prepend('<input type="text" style="margin:0;">');
-  $('.interest-elements input').val(interests);
-  $('.interest-confirm').tooltip({
-    title: 'Accept'
-  });
-  $('.interest-reject').tooltip({
-    title: 'Cancel'
-  });
-  $('.interest-confirm').click(function() {
-    // take the text and enter in the db, also show the text
-    var interests = $('.interest-elements input').val();
-    $.ajax({
-      url: 'change-interests.php',
-      type: 'POST',
-      data: {uid: uuid, interests: interests}
-    });
-    reShowAddButton(interests);
-  });
-  $('.interest-reject').click(function() {
-    reShowAddButton(interests);
-  });
-}
+
 
 /* delete Debate will take the debate and remove myself from the participant list */
 function debateDelete() {
@@ -263,7 +213,8 @@ function debateDelete() {
   $(this).parent().parent().fadeOut();
   $(this).parent().parent().remove();
   if (!$('.debate-table tbody').children().size()) { // remove the tbody
-    $('.debate-table tbody').append('<tr id="nill"><td>You ' + "don't have any ongoing debates right now</td></tr>");
+    $('.debate-table tbody').append('<tr id="nill"><td>You ' +
+																		"don't have any ongoing debates right now</td></tr>");
     $('.debate-table thead').html('');
   }
 }
@@ -282,7 +233,7 @@ function showConnections(evt) {
   var n = pids.length;
   var code = '<ul>';
   for (var i = 0; i < n; i++) {
-    code += '<li id="' + pids[i] + '"><a target="_blank" href="/confrap/user/home/' +
+    code += '<li id="' + pids[i] + '"><a target="_blank" href="/konfrap/user/home/' +
 	  pids[i] + '"><img id="' + pids[i] + '" src="https://graph.facebook.com/' +
 	  pids[i] + '/picture"/></a></li>';
   }
@@ -311,11 +262,6 @@ function popovers() {
   $('#modify-profile').popover({
     title: 'Modify Profile',
     content: 'Modify your profile to add debate themes and interests.',
-    placement: 'bottom'
-  });
-  $('#start').popover({
-    title: 'Start a new debate',
-    content: 'Start a new debate by defining the topic giving description through relevant links & themes. Invite your friends to participate in the debate and set the time limit for the debate. Once the time limit expires, no participants will be able to add new comments.',
     placement: 'bottom'
   });
   $('#debate-topic').popover({
@@ -352,10 +298,6 @@ function popovers() {
   $('.add').tooltip({
     title: 'Modify/Add Debating interests'
   });
-  $('#friend-search').tooltip({
-    title: 'Search Debaters on IIT Debates',
-    placement: 'left'
-  });
   $('.delete-debate').tooltip({
     title: 'Remove myself as a participant',
     placement: 'left'
@@ -373,39 +315,17 @@ function postFb() {
     $(this).html('Post this debate on to Facebook');
   }
 }
-function setEditable() {
-	$('.editable').each(function () {
-		var field_type
-			, id;
-		id = $(this).attr('name');
-		
-		if ($(this).hasClass('interest-elements')) {
-			field_type = 'interests';
-		}
-		$(this).editInPlace({
-			url: "/confrap/user/edit",
-			params: keyValueString({
-				'fid': '12',
-				'field_type': field_type,
-				'id': id
-			}),
-			success : function(newEditorContentString){return newEditorContentString;},
-			field_type: "text",
-			saving_image: "/confrap/assets/img/ajax-loader.gif",
-			show_buttons: true
-		});
-	});
-}
+
 function setUpInterests() {
 	$('#interest-tags').tagit({
 		readOnly: ufbid !== myfbid,
 		removeConfirmation: true,
 		allowSpaces: true,
-		placeholderText: 'add interests...',
+		placeholderText: ufbid !== myfbid ? '' : 'add interests...',
 		afterTagAdded: function (evt, ui) {
 			if (!ui.duringInitialization) {
 				$.ajax({
-					url: '/confrap/user/add_interest',
+					url: '/konfrap/user/add_interest',
 					data: {
 						'uid': uuid,
 						'val': ui.tagLabel
@@ -418,7 +338,7 @@ function setUpInterests() {
 		afterTagRemoved: function (evt, ui) {
 			if (!ui.duringInitialization) {
 				$.ajax({
-					url: '/confrap/user/rem_interest',
+					url: '/konfrap/user/remove_interest',
 					data: {
 						'uid': uuid,
 						'val': ui.tagLabel
@@ -441,12 +361,10 @@ $(function() {
   $('#follow').click(followUser);
   $('#radio').buttonset();
   $('#radio2').buttonset();
-  $('span.add').click(modifyInterests);
   $('.delete-debate').click(debateDelete);
   $('#my-followers').click({p: '1'}, showConnections);
   $('#my-followees').click({p: '2'}, showConnections);
-  popovers();
-  searchSetup();
-	setEditable();
+  //popovers();
+	//setEditable();
 	setUpInterests();
 });

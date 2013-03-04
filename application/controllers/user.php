@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The user model in Confrap
+ * The user model in Konfrap
  */
 class User extends CI_Controller {
   public function __construct() {
@@ -61,11 +61,15 @@ class User extends CI_Controller {
     $data['signed_in'] = $signed_in;
     $data['me'] = ($signed_in and ($fb['fbid'] === $user['fbid']));
     $data['user_profile'] = $user;
+    $data['fclass'] = in_array($fb['fbid'], $data['followers']) ?
+                      'btn-danger' : 'btn-primary';
+    $data['ftext'] = in_array($fb['fbid'], $data['followers']) ?
+                      'Unfollow' : 'Follow';
     
     $this->load->view('templates/prologue', $data);
     $this->load->view('templates/header', $data);
     $this->load->view('user/home', $data);
-    $this->load->view('user/home_js', $data);
+    $this->load->view('user/home_js');
     $this->load->view('templates/footer', $data);
   }
   
@@ -90,13 +94,28 @@ class User extends CI_Controller {
     }
   }
   
+  public function my_friends() {
+    $fb = $this->session->userdata('fb');
+    if ($fb['fbid']) {
+      try {
+        $access_token = $this->facebook->getAccessToken();
+        $friends = $this->facebook->api('/me/friends', 'GET');
+        echo json_encode($friends);
+      } catch (FacebookApiException $e) {}
+    }
+  }
+  
+  
+  /**
+   * Returns the searcheable db for a user
+   */
   public function all() {
     $users = $this->user_model->get_users();
     $response = array();
     foreach ($users as $user) {
       array_push($response, array(
                               'name'    =>  $user['name'],
-                              'uid'     =>  $user['id'],
+                              'id'      =>  $user['id'],
                               'ltype'   =>  'u'
                             )
                 );
@@ -113,7 +132,7 @@ class User extends CI_Controller {
     }
   }
   
-  public function rem_interest() {
+  public function remove_interest() {
     $uid = $this->input->get('uid');
     $val = $this->input->get('val');
     $fb = $this->session->userdata('fb');

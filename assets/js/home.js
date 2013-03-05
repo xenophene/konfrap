@@ -4,149 +4,90 @@
   * Debate topic, Debate description, Debate themes, Context links/urls, Friends
   * who are challenged for or against this debate, the debate deadline
   */
+function setUpTypeahead() {
+	$('#participants').tagit({
+		removeConfirmation: true,
+		allowSpaces: true,
+		placeholderText: 'Add participants...',
+		availableTags: friendNames,
+		autocomplete: {
+			source: function(request, response) {
+        var results = $.ui.autocomplete.filter(friendNames, request.term);
+        response(results.slice(0, 10));
+			},
+			delay: 100,
+			minLength: 3
+		}
+	});
+	$('#overlay').modal('hide');
+	$('#start-debate-form').modal('show');
+}
 function defineDebate() {
-  var id = '#start-debate-form';
-  $( "#debate-theme" ).autocomplete({
-    minLength: 3,
-    source: function( request, response ) {
-      // delegate back to autocomplete, but extract the last term
-      response( $.ui.autocomplete.filter(
-	      themes, extractLast( request.term ) ) );
-    },
-    focus: function() {
-      // prevent value inserted on focus
-      return false;
-    },
-    select: function( event, ui ) {
-      var terms = split( this.value );
-      // remove the current input
-      terms.pop();
-      // add the selected item
-      terms.push( ui.item.value );
-      // add placeholder to get the comma-and-space at the end
-      terms.push( "" );
-      this.value = terms.join( ", " );
-      return false;
-    },
-    maxResults: 4
+	
+  $( "#debate-theme" ).tagit({
+    removeConfirmation: true,
+		allowSpaces: true,
+		placeholderText: 'Add themes...',
+		availableTags: themes,
+		autocomplete: {
+			source: function(request, response) {
+        var results = $.ui.autocomplete.filter(themes, request.term);
+        response(results.slice(0, 10));
+			},
+			delay: 100,
+			minLength: 3
+		}
   });
-  /* Here we query the user's fb friends for whom we also get the userids.
-     We send the fb friends's userids. Incase a particular fb friend doesn't 
-     exist in our db, we need to somehow intimate that person */
   if (friendNames == null) {
+		showLoadingModal();
     $.ajax({
       url: '/konfrap/user/my_friends',
       dataType: 'json',
-      success: function(data) {
-        var result = data;
-        var names = Array();
-        var ids = Array();
+      success: function(result) {
+        friendNames = [],
+        friendIds = {};
         for (var i = 0; i < result.data.length; i++) {
-          names.push(result.data[i].name);
-          ids.push(result.data[i].id);
+          friendNames.push(result.data[i].name);
+					friendIds[result.data[i].name] = result.data[i].id;
         }
-        $( "#participants").autocomplete({
-					minLength: 3,
-					source: function( request, response ) {
-						// delegate back to autocomplete, but extract the last term
-						response( $.ui.autocomplete.filter(
-							names, extractLast( request.term ) ) );
-					},
-					focus: function() {
-						// prevent value inserted on focus
-						return false;
-					},
-					select: function( event, ui ) {
-						var terms = split( this.value );
-						// remove the current input
-						terms.pop();
-						// add the selected item
-						terms.push( ui.item.value );
-						// add placeholder to get the comma-and-space at the end
-						terms.push( "" );
-						this.value = terms.join( ", " );
-						return false;
-					},
-					maxResults: 4
-				});
-        friendNames = names;
-        friendIds = ids;
+				setUpTypeahead();
       }
     });
-    // enable the participants file
-    $('#participants').show();
-    $('#cancel-debate').show();
   } else {
-    $( "#participants" ).autocomplete({
-	    minLength: 3,
-	    source: function( request, response ) {
-		    // delegate back to autocomplete, but extract the last term
-		    response( $.ui.autocomplete.filter(
-			    friendNames, extractLast( request.term ) ) );
-	    },
-	    focus: function() {
-		    // prevent value inserted on focus
-		    return false;
-	    },
-	    select: function( event, ui ) {
-		    var terms = split( this.value );
-		    // remove the current input
-		    terms.pop();
-		    // add the selected item
-		    terms.push( ui.item.value );
-		    // add placeholder to get the comma-and-space at the end
-		    terms.push( "" );
-		    this.value = terms.join( ", " );
-		    return false;
-	    },
-	    maxResults: 4
-    });
+		setUpTypeahead();
   }
-  $(id).modal('show');
 }
 
 $('#start-debate-form form').submit(function() {
-  var participants = $('#participants').val().split(',');
-  var np = [];
+	var participants = $('#participants').tagit('assignedTags');
   var indexes = [];
-  for (var i = 0; i < participants.length; i++) {
-    var s = $.trim(participants[i]);
-    var j = $.inArray(s, friendNames);
-    if (j != -1) {
-      indexes[i] = friendIds[j];
-      np[i] = s;
-    }
-  }
+	participants.map(function (e) {
+		indexes.push(friendIds[e]);
+	});
   $('#debate-desc').val($('#debate-desc').val().replace(/(^,)|(,$)/g, ""));
-  $('#participants').val(np.join());
+  $('#participants-names').val(participants.join());
   $('#participant-ids').val(indexes.join());
+	
   var debtopic = $('#debate-topic').val();
   var debdesc = $('#debate-desc').val();
-  var debthemes = $('#debate-theme').val();
+  var debthemes = $('#debate-theme').tagit('assignedTags').join();
+	
   var partids = $('#participant-ids').val();
-  var partnames = $('#participants').val();
-  var timelimit = $('input[name=time-limit]:checked').val();
-  var privacy = $('input[name=privacy]:checked').val();
-  var postToFb = $('#post-to-fb-input').val();
-  // send these variables over to debate-create and wait! need to think of some authentication?!
+  var partnames = $('#participants-names').val();
   $.ajax({
-    url: 'includes/debate-create.php',
-    type: 'POST',
+    url: '/konfrap/debate/create',
+		type: 'POST',
     data: {
       'debate-topic': debtopic,
-      'debate-desc': debdesc,
-      'debate-theme': debthemes,
+      'debate-description': debdesc,
+      'debate-themes': debthemes,
       'participant-ids': partids,
-      'participants':	partnames,
-      'time-limit': timelimit,
-      'privacy': privacy,
-      'post-to-fb-input': postToFb,
-      'uname': uname
+			'myfbid': myfbid
     },
     success: function (data) {
-      console.log(data);
+			$('#start-debate-form').modal('hide');
       if (!data) console.log('something bad happened!');
-      else window.location = 'debate.php?debid=' + data;
+      else window.location = '/konfrap/debate/' + data;
     },
     error: function(msg) {
       console.log(msg);
@@ -192,8 +133,8 @@ function followUser () {
 function clearDebateForm() {
   $('#debate-topic').val('');
   $('#debate-desc').val('');
-  $('#debate-theme').val('');
-  $('#participants').val('');
+  $('#debate-theme').tagit('removeAll');
+  $('#participants').tagit('removeAll');
 }
 
 

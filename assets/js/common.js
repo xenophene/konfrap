@@ -24,18 +24,7 @@ function keyValueString(obj) {
   }
   return s.join('&');
 }
-// add the border to the taller of the left-right divs
-function addDivider() {
-  try {
-    var h1 = $('#content .leftcol').css('height').split('px')[0];
-    var h2 = $('#content .rightcol').css('height').split('px')[0];
-    if (parseInt(h1) >= parseInt(h2)) {
-      $('#content .leftcol').css('border-right', '1px solid #eee');
-    } else {
-      $('#content .rightcol').css('border-left', '1px solid #eee');
-    }
-  } catch (err) {}
-}
+
 /* Set up the user search functionality by querying through AJAX the user base */
 function searchSetup() {
   $.ajax({
@@ -109,8 +98,27 @@ function validateEmail(email) {
     return re.test(email);
 }
 
+function init() {
+  $.ajax({
+    url: '/konfrap/user/my_friends',
+    dataType: 'json',
+    success: function(result) {
+      friendNames = [],
+      friendIds = {};
+      for (var i = 0; i < result.data.length; i++) {
+        friendNames.push(result.data[i].name);
+        friendIds[result.data[i].name] = result.data[i].id;
+      }
+    }
+  });
+}
+function showLoadingModal() {
+  var loadingImg = '<img src="/konfrap/assets/img/loading3.gif">';
+  renderOverlay('#overlay', '<h2>Loading...</h2>', loadingImg);
+}
 $(function () {
   //addDivider();
   searchSetup();
   $('.tip').each(function() {$(this).tooltip(); });
 });
+init();

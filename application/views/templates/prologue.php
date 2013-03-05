@@ -14,8 +14,11 @@ echo meta($meta);
 <title><?php echo $name; ?> | Konfrap</title>
 <?php
 
-echo link_tag('/assets/css/bootstrap.min.css');
-echo link_tag('/assets/css/style.css');
-echo link_tag('/assets/css/jquery.tagit.css');
-echo link_tag('/assets/css/tagit.ui-zendesk.css');
-echo link_tag('/assets/ico/favicon.ico', 'shortcut icon', 'image/ico');
+echo link_tag('assets/css/bootstrap.min.css');
+echo link_tag('assets/css/style.css');
+echo link_tag('assets/css/jquery-ui.css');
+echo link_tag('assets/css/jquery.tagit.css');
+echo link_tag('assets/css/tagit.ui-zendesk.css');
+echo link_tag('assets/ico/favicon.ico', 'shortcut icon', 'image/ico');
+?>
+</head>

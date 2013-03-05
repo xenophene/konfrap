@@ -32,9 +32,11 @@ class User extends CI_Controller {
   public function home($id = null, $use_fb = "0") {
     $fb = $this->session->userdata('fb');
     $signed_in = ($fb['me'] != null) and $fb['fbid'];
-    if ( ! $signed_in and $id === null) { /* neither signed in nor asking for a user - REDIRECT */
+    if ( ! $signed_in and $id === null) {
+      /* neither signed in nor asking for a user - REDIRECT */
       redirect('user/index');
-    } else if ($signed_in and $id === null) { /* signed in and asking for own page */
+    } else if ($signed_in and $id === null) {
+      /* signed in and asking for own page */
       $id = $fb['me']['id'];
     }
     if ($use_fb === "0") {
@@ -66,6 +68,7 @@ class User extends CI_Controller {
     $data['ftext'] = in_array($fb['fbid'], $data['followers']) ?
                       'Unfollow' : 'Follow';
     
+    $data['updates'] = array(array('heading' => 'update heading', 'body' => 'body'));
     $this->load->view('templates/prologue', $data);
     $this->load->view('templates/header', $data);
     $this->load->view('user/home', $data);
@@ -80,7 +83,7 @@ class User extends CI_Controller {
     $follower = $this->input->get('follower');
     $followee = $this->input->get('followee');
     $fb = $this->session->userdata('fb');
-    if ($fb['fbid'] === $follower) {
+    if ($fb['fbid'] and $fb['fbid'] === $follower) {
       $this->user_model->set_follower($follower, $followee);
     }
   }
@@ -127,7 +130,8 @@ class User extends CI_Controller {
     $uid = $this->input->get('uid');
     $val = $this->input->get('val');
     $fb = $this->session->userdata('fb');
-    if ($fb['fbid'] === $this->user_model->get_fbid_from_uid($uid)) {
+    if ($fb['fbid'] and
+        $fb['fbid'] === $this->user_model->get_fbid_from_uid($uid)) {
       $this->user_model->set_interest($uid, $val);
     }
   }
@@ -136,7 +140,8 @@ class User extends CI_Controller {
     $uid = $this->input->get('uid');
     $val = $this->input->get('val');
     $fb = $this->session->userdata('fb');
-    if ($fb['fbid'] === $this->user_model->get_fbid_from_uid($uid)) {
+    if ($fb['fbid'] and
+        $fb['fbid'] === $this->user_model->get_fbid_from_uid($uid)) {
       $this->user_model->unset_interest($uid, $val);
     }
   }

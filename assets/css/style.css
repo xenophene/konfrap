@@ -1,26 +1,25 @@
 html {
   background: #fff;
   height: 100%;
+  width: 100%;
 }
 body {
   margin: 0 auto;
-  padding: 0px;
+  padding: 0;
   background: #fff;
   font-size: 13px;
   line-height: 18px;
   color: #333;
-  width: 1000px;
-  border-left: solid 1px #ccc;
-  border-right: solid 1px #ccc;
-  border-bottom: solid 1px #ccc;
+  min-width: 1000px;
 }
 a {
   text-decoration: none;
   outline: none;
 }
 #header {
-  background: #00349C;
+  background: #67349C;
   color: #FFF;
+  padding: 5px 0 5px 0;
   height: 32px;
   position: relative;
   z-index: 8;
@@ -43,17 +42,15 @@ span.logo a:hover {
 }
 span.options {
   position: absolute;
-  right: 0px;
+  right: 100px;
   height: 100%;
   font-size: 11px;
-  top: 0px;
 }
 span.search {
   position: absolute;
-  left: 10px;
+  left: 100px;
   height: 100%;
   font-size: 11px;
-  top: 0px;
 }
 span.search .icon-search {
   position: absolute;
@@ -74,13 +71,13 @@ span.search input {
 .header-ul a {
   color: #fff;
   text-decoration: none;
-  padding: 9px 5px 9px 5px;
+  padding: 14px 5px 14px 5px;
 }
 
 .header-ul li {
   display: inline;
   text-decoration: none;
-  padding: 9px 4px 8px 4px;
+  padding: 14px 4px 13px 4px;
   margin: 0px;
   color: #fff;
   outline: none;
@@ -93,8 +90,11 @@ span.emph {
   font-size: 30px;
   margin: 5px 0 5px 0;
 }
+#main {
+  padding: 0 100px 0 100px;
+}
 #prominent {
-  padding: 20px;
+  padding: 20px 0 20px 0;
   clear: both;
   overflow: auto;
   border-bottom: 1px solid #eee;
@@ -122,7 +122,7 @@ td.small {
 div.engage {
   position: absolute;
   top: 20px;
-  right: 20px;
+  right: 0px;
   padding: 0px;
   margin: 0px;
 }
@@ -184,49 +184,52 @@ div.deb-themes {
   position: absolute;
   right: 180px;
 }
-
+.details {
+  font-weight: bold;
+  font-style: italic;
+  padding-right: 5px;
+}
+ul {
+  margin: 0 0 5px 0;
+  padding: 0 0 0 4px;
+}
+.outline {
+  border: solid 1px #aaa;
+}
 .interest-elements {
   padding: 0 8px 0 0;
-  font-size: 14px;
   max-width: 400px;
   margin: 0;
-  
 }
-#interest-tags {
+.updates {
+  position: relative;
+  width: 800px;
+  padding: 10px;
 }
-td.interest-elements>ul {
+
+.update {
+  padding: 20px;
   margin: 0;
+  font-size: 13px;
+  border-bottom: 1px solid #eee;
 }
-td.debate-score {
-  font-size: 14px;
+.update .heading {
+  font-weight: bold;
+  color: #333;
 }
-td.interest-elements-p {
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  cursor: pointer;
-  vertical-align: middle;
-}
-td.interest-elements-p:hover {
-  background-color: #e0e0e0;
+.update .body {
+  color: #666;
 }
 
 #content {
   position: relative;
+  padding: 10px;
 }
-#content .leftcol {
-  width: 50%;
-  min-height: 300px;
-  margin-left: -1px;
-  padding: 10px 0 0 0;
-  float: left;
-}
-#content .rightcol {
-  float: right;
-  margin: 0;
-  padding: 10px 0 0 0;
-  right: 0px;
-  width: 50%;
+#content span.home-heading {
+  padding: 20px;
+  font-size: 17px;
+  color: #333;
+  font-weight: bold;
 }
 #content .comments {
   padding: 0;
@@ -302,60 +305,12 @@ td.interest-elements-p:hover {
 .support-point:hover, .rebutt-point:hover, .delete-point:hover, .votes:hover, .comment-date:hover {
   text-decoration: underline;
 }
-#content .update {
-  padding: 20px 20px 20px 20px;
-  margin: 0px 0px 0 0px;
-  font-size: 13px;
-  border-bottom: 1px solid #eee;
-}
-#content .update:nth-child(2) {
-  margin-top: 10px;
-}
-#content .update:hover {
-  background-color: #f5f5f5;
-}
-#content span.home-heading {
-  padding: 20px;
-  font-size: 17px;
-  color: #333;
-  font-weight: bold;
-}
-#content .debate-table {
-  margin: 20px;
-  width: 450px;
-}
-#content .debate-table thead td {
-  padding-top: 0px;
-  font-weight: bold;
-}
-#content .debate-table tbody tr td {
-  max-width: 220px;
-}
-#content .debate-table tbody tr td.points {
-  padding-left: 10px;
-}
-#content .debate-table tr {
-  cursor: pointer;
-}
+
 b {
   /*color: #D14836;*/
   color: #00349C;
 }
-.ui-autocomplete {
-	max-height: 150px;
-	overflow-y: auto;
-	/* prevent horizontal scrollbar */
-	overflow-x: hidden;
-	/* add padding to account for vertical scrollbar */
-	padding-right: 20px;
-}
 #radio, #radio2 {
-}
-/* IE 6 doesn't support max-height
- * we use height instead, but this forces the menu to always be this tall
- */
-html .ui-autocomplete {
-	height: 100px;
 }
 p.emph {
   font-size: 20px;

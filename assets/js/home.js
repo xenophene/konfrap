@@ -85,9 +85,13 @@ $('#start-debate-form form').submit(function() {
 			'myfbid': myfbid
     },
     success: function (data) {
-			$('#start-debate-form').modal('hide');
-      if (!data) console.log('something bad happened!');
-      else window.location = '/konfrap/debate/' + data;
+			
+      if (data === "0") {
+				console.log('something bad happened!');
+				$('#start-debate-form').modal('hide');
+			} else {
+				window.location = '/konfrap/debate/' + data;
+			}
     },
     error: function(msg) {
       console.log(msg);

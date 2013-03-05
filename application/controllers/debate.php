@@ -47,6 +47,7 @@ class Debate extends CI_Controller {
     $data['name'] = $debate['topic'];
     $this->load->view('templates/prologue', $data);
     $this->load->view('templates/header', $data);
+    $this->load->view('debate/debate_js', $data);
     $this->load->view('templates/footer', $data);
   }
 }

@@ -21,4 +21,5 @@ echo link_tag('assets/css/jquery.tagit.css');
 echo link_tag('assets/css/tagit.ui-zendesk.css');
 echo link_tag('assets/ico/favicon.ico', 'shortcut icon', 'image/ico');
 ?>
+<link rel="icon" href="/confrap/assets/ico/favicon.ico"/>
 </head>

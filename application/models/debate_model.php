@@ -97,4 +97,12 @@ class Debate_model extends CI_Model {
     }
     return $themes;
   }
+  
+  public function edit_field($id, $name, $value) {
+    $data = array(
+              $name   =>  $value
+            );
+    $this->db->where(array('id'   =>  $id));
+    $this->db->update('debates', $data);
+  }
 }

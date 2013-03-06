@@ -372,35 +372,31 @@ function editDescription() {
   textarea.val(descOrig);
   textarea.autosize();
 }
+
+
 $('.editable').each(function () {
-	var field_type
-		, id;
+	var field_type,
+			id;
+		
 	id = $(this).attr('name');
 	
 	if ($(this).hasClass('topic')) {
 		field_type = 'topic';
 	} else if ($(this).hasClass('desc')) {
-		field_type = 'desc';
-	} else if ($(this).hasClass('comment-data')) {
-		field_type = 'comment';
+		field_type = 'description';
 	}
-	$(this).editInPlace({
-		url: "includes/ajax_scripts.php",
-	  params: keyValueString({
-			'fid': '11',
-			'field_type': field_type,
-			'id': id
-		}),
-	  success : function(newEditorContentString){
-			console.log(newEditorContentString);
-			return formatString(newEditorContentString);
-		},
-	  field_type: "textarea",
-	  textarea_rows: "15",
-	  textarea_cols: "35",
-	  saving_image: "./includes/assets/img/ajax-loader.gif",
-	  show_buttons: true
+	
+	$(this).editable({
+		mode:	'inline',
+		placement: 'bottom',
+		inputclass: 'input-xlarge',
+		type: 'textarea',
+		pk:		id,
+		name: field_type,
+		url:	'/konfrap/debate/edit_field/',
+		title:	'Enter ' + field_type
 	});
+	
 });
 
 
@@ -547,6 +543,7 @@ function setUpThemeTags() {
 	})
 }
 $(function() {
+	
   //$('textarea.yes, textarea.no').autosize();
   $('.upvote').click(upvote);
   $('.downvote').click(downvote);

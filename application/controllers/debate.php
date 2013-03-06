@@ -77,4 +77,14 @@ class Debate extends CI_Controller {
       $this->debate_model->unset_theme($id, $val);
     }
   }
+  
+  public function edit_field() {
+    $id = $this->input->post('pk');
+    $name = $this->input->post('name');
+    $value = $this->input->post('value');
+    
+    if ($id and $name and $value and $value !== '') {
+      $this->debate_model->edit_field($id, $name, $value);
+    }
+  }
 }

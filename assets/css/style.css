@@ -174,8 +174,7 @@ div.desc {
   margin: 5px 0 5px 0;
 }
 div.deb-themes {
-  color: #555;
-  font-size: 14px;
+  
   font-style: italic;
   margin-top: 4px;
 }
@@ -196,7 +195,7 @@ ul {
 .outline {
   border: solid 1px #aaa;
 }
-.interest-elements {
+.tag-elements {
   padding: 0 8px 0 0;
   max-width: 400px;
   margin: 0;

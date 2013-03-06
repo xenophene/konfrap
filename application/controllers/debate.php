@@ -33,7 +33,7 @@ class Debate extends CI_Controller {
     }
   }
   
-  public function index($id = null) {
+  public function index($id = FALSE) {
     if ( ! $id) {
       redirect('/user');
     }
@@ -45,9 +45,36 @@ class Debate extends CI_Controller {
     $signed_in = ($fb['me'] != null) and $fb['fbid'];
     $data['signed_in'] = $signed_in;
     $data['name'] = $debate['topic'];
+    
     $this->load->view('templates/prologue', $data);
     $this->load->view('templates/header', $data);
+    
+    $data['topic'] = $debate['topic'];
+    $data['id'] = $debate['id'];
+    $data['description'] = $debate['description'];
+    $data['themes'] = $this->debate_model->get_themes($id);
+    
+    $this->load->view('debate/debate', $data);
+    
+    $data['myfbid'] = $fb['fbid'];
     $this->load->view('debate/debate_js', $data);
     $this->load->view('templates/footer', $data);
+  }
+  
+  public function add_theme() {
+    $id = $this->input->post('id');
+    $val = $this->input->post('val');
+    $fb = $this->session->userdata('fb');
+    if ($fb['fbid'] and $id and $val) {
+      $this->debate_model->set_theme($id, $val);
+    }
+  }
+  public function remove_theme() {
+    $id = $this->input->post('id');
+    $val = $this->input->post('val');
+    $fb = $this->session->userdata('fb');
+    if ($fb['fbid'] and $id and $val) {
+      $this->debate_model->unset_theme($id, $val);
+    }
   }
 }

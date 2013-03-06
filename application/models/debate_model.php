@@ -69,4 +69,32 @@ class Debate_model extends CI_Model {
     $query = $this->db->get_where('debates', array('id'   =>  $id));
     return $query->row_array();
   }
+  
+  public function set_theme($id, $val) {
+    $data = array(
+            'debate_id'   =>  $id,
+            'theme'       =>  $val
+          );
+    
+    $query = $this->db->insert('debate_themes', $data);
+  }
+  
+  public function unset_theme($id, $val) {
+    $data = array(
+            'debate_id'   =>  $id,
+            'theme'       =>  $val
+          );
+    
+    $query = $this->db->delete('debate_themes', $data);
+  }
+  
+  public function get_themes($id) {
+    $this->db->select('theme');
+    $query = $this->db->get_where('debate_themes', array('debate_id'  =>  $id));
+    $themes = array();
+    foreach ($query->result_array() as $row) {
+      array_push($themes, $row['theme']);
+    }
+    return $themes;
+  }
 }

@@ -105,10 +105,11 @@ function pushComment(pushData) {
   else displayComment('#no', formatComment);
 }
 
+/*
 var pusher = new Pusher(PUSHER_APP_KEY);
 var channel = pusher.subscribe('comments-' +  debid);
 channel.bind('new_comment', pushComment);
-
+*/
 /* will look at the support point box, and if somethere will add it to the db
    and render it on the screen at the top even if there are higher votes above */
 function post(side, formatComment, comment, parentComId) {
@@ -402,6 +403,8 @@ $('.editable').each(function () {
 	});
 });
 
+
+
 // view conversation starting from this conversation upwards following parent
 // pointers
 function viewConversation() {
@@ -504,8 +507,47 @@ function desanitize() {
   var desc = $('.desc').html();
   $('.desc').html(desc);
 }
+
+function setUpThemeTags() {
+	$('#theme-tags').tagit({
+		removeConfirmation: true,
+		allowSpaces: true,
+		placeholderText: 'add more themes...',
+		availableTags: themes,
+		autocomplete: {
+			source: function(request, response) {
+        var results = $.ui.autocomplete.filter(themes, request.term);
+        response(results.slice(0, 10));
+			},
+			delay: 100,
+			minLength: 2
+		},
+		afterTagAdded: function (evt, ui) {
+			if (!ui.duringInitialization) {
+				$.ajax({
+					url: '/konfrap/debate/add_theme',
+					type: 'POST',
+					data: {
+						'id': debid,
+						'val': ui.tagLabel
+					}
+				});
+			}
+		},
+		afterTagRemoved: function (evt, ui) {
+			$.ajax({
+				url: '/konfrap/debate/remove_theme',
+				type: 'POST',
+				data: {
+					'id': debid,
+					'val': ui.tagLabel
+				}
+			});
+		}
+	})
+}
 $(function() {
-  $('textarea.yes, textarea.no').autosize();
+  //$('textarea.yes, textarea.no').autosize();
   $('.upvote').click(upvote);
   $('.downvote').click(downvote);
   $('.support-point').click(support_point);
@@ -537,6 +579,7 @@ $(function() {
       }
     }
   });
+	/*
   marked.setOptions({
     gfm: true,
     pedantic: false,
@@ -549,19 +592,9 @@ $(function() {
       return code;
     }
   });
+  */
   desanitize();
-  popovers();
-  searchSetup();
-  $('#tinfo').scroll(function () {
-    if ($(this).scrollTop() > 50)
-	    $('#back-top').fadeIn();
-    else
-	    $('#back-top').fadeOut();
-  });
-  $('#back-top a').click(function () {
-    $('#tinfo').animate({
-	    scrollTop: 0
-    }, 800);
-    return false;
-  });
+  //popovers();
+	
+	setUpThemeTags();
 });

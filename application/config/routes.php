@@ -48,6 +48,8 @@ $route['user/logout'] = 'user/logout';
 $route['user/home/(:any)'] = 'user/home/$1';
 
 $route['debate/create'] = 'debate/create';
+$route['debate/add_theme'] = 'debate/add_theme';
+$route['debate/remove_theme'] = 'debate/remove_theme';
 $route['debate/(:any)'] = 'debate/index/$1';
 
 $route['contact/feedback'] = 'contact/feedback';

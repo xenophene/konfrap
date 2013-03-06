@@ -13,7 +13,7 @@
       <tbody>
         <tr>
           <td class="contain-interest"><span id="interested-in" class="details">interested in:</span></td>
-          <td name="<?php echo $user_profile['fbid'];?>" class="interest-elements">
+          <td name="<?php echo $user_profile['fbid'];?>" class="tag-elements">
             <ul title="Interest Tags" id="interest-tags">
               <?php foreach ($interests as $interest): ?>
               <li>

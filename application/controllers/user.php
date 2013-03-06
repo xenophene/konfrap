@@ -92,7 +92,7 @@ class User extends CI_Controller {
     $follower = $this->input->get('follower');
     $followee = $this->input->get('followee');
     $fb = $this->session->userdata('fb');
-    if ($fb['fbid'] === $follower) {
+    if ($fb['fbid'] === $follower and $follower and $followee) {
       $this->user_model->rem_follower($follower, $followee);
     }
   }
@@ -130,7 +130,7 @@ class User extends CI_Controller {
     $uid = $this->input->get('uid');
     $val = $this->input->get('val');
     $fb = $this->session->userdata('fb');
-    if ($fb['fbid'] and
+    if ($fb['fbid'] and $uid and $val and
         $fb['fbid'] === $this->user_model->get_fbid_from_uid($uid)) {
       $this->user_model->set_interest($uid, $val);
     }

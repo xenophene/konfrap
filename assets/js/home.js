@@ -16,7 +16,7 @@ function setUpTypeahead() {
         response(results.slice(0, 10));
 			},
 			delay: 100,
-			minLength: 3
+			minLength: 2
 		}
 	});
 	$('#overlay').modal('hide');
@@ -62,7 +62,11 @@ $('#start-debate-form form').submit(function() {
 	var participants = $('#participants').tagit('assignedTags');
   var indexes = [];
 	participants.map(function (e) {
-		indexes.push(friendIds[e]);
+		if (e in friendIds) {
+			indexes.push(friendIds[e]);
+		} else {
+			indexes.push(ufbid);
+		}
 	});
   $('#debate-desc').val($('#debate-desc').val().replace(/(^,)|(,$)/g, ""));
   $('#participants-names').val(participants.join());
@@ -104,9 +108,14 @@ $('#start-debate-form form').submit(function() {
 /* subset of defineDebate for a TARGETTED debate*/
 function defineChallengeDebate() {
   defineDebate();
-  $('#participants').val($('tr td.name').html() + ', ');
+	$('#participants').tagit('createTag', $('tr td.name').html());
 }
-
+function clearDebateForm() {
+  $('#debate-topic').val('');
+  $('#debate-desc').val('');
+  $('#debate-theme').tagit('removeAll');
+  $('#participants').tagit('removeAll');
+}
 /* Follow this user, toggling the state/css, to unfollow and follow */
 function auxFollowUser(elmt, oldClassName, newClassName, fCode, htmlCode) {
   elmt.removeClass(oldClassName);
@@ -132,13 +141,6 @@ function followUser () {
   else {
     auxFollowUser($(this), 'btn-danger', 'btn-primary', 'unfollow', 'Follow');
   }
-}
-
-function clearDebateForm() {
-  $('#debate-topic').val('');
-  $('#debate-desc').val('');
-  $('#debate-theme').tagit('removeAll');
-  $('#participants').tagit('removeAll');
 }
 
 
@@ -265,6 +267,15 @@ function setUpInterests() {
 	$('#interest-tags').tagit({
 		readOnly: ufbid !== myfbid,
 		removeConfirmation: true,
+		availableTags: themes,
+		autocomplete: {
+			source: function(request, response) {
+        var results = $.ui.autocomplete.filter(themes, request.term);
+        response(results.slice(0, 10));
+			},
+			delay: 100,
+			minLength: 2
+		},
 		allowSpaces: true,
 		placeholderText: ufbid !== myfbid ? '' : 'add interests...',
 		afterTagAdded: function (evt, ui) {
@@ -274,22 +285,18 @@ function setUpInterests() {
 					data: {
 						'uid': uuid,
 						'val': ui.tagLabel
-					},
-					success: function (d) {
 					}
 				});
 			}
 		},
 		afterTagRemoved: function (evt, ui) {
-			if (!ui.duringInitialization) {
-				$.ajax({
-					url: '/konfrap/user/remove_interest',
-					data: {
-						'uid': uuid,
-						'val': ui.tagLabel
-					}
-				});
-			}
+			$.ajax({
+				url: '/konfrap/user/remove_interest',
+				data: {
+					'uid': uuid,
+					'val': ui.tagLabel
+				}
+			});
 		}
 	});
 }

@@ -53,6 +53,12 @@ class Debate extends CI_Controller {
     $data['id'] = $debate['id'];
     $data['description'] = $debate['description'];
     $data['themes'] = $this->debate_model->get_themes($id);
+    $data['creator'] = $debate['creator_fbid'];
+    $data['score'] = $debate['score'];
+    $data['followers'] = $this->debate_model->get_followers($id);
+    $data['num_followers'] = sizeof($data['followers']);
+    $time = strtotime($debate['startdate']);
+    $data['time'] = date('j F Y', $time);
     
     $this->load->view('debate/debate', $data);
     
@@ -76,6 +82,20 @@ class Debate extends CI_Controller {
     if ($fb['fbid'] and $id and $val) {
       $this->debate_model->unset_theme($id, $val);
     }
+  }
+  
+  public function all() {
+    $users = $this->debate_model->get_debates();
+    $response = array();
+    foreach ($users as $user) {
+      array_push($response, array(
+                              'name'    =>  $user['topic'],
+                              'id'      =>  $user['id'],
+                              'ltype'   =>  'd'
+                            )
+                );
+    }
+    echo json_encode($response);
   }
   
   public function edit_field() {

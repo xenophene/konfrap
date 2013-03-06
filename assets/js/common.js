@@ -26,6 +26,18 @@ function keyValueString(obj) {
 }
 
 /* Set up the user search functionality by querying through AJAX the user base */
+function setUpSearch(data) {
+  for (var i = 0; i < data.length; i++) {
+    var x = data[i];
+    names.push($.trim(x.name));
+    ids.push(x.id);
+    searchtypes.push(x.ltype);
+  }
+  $('#friend-search').typeahead({
+    source: names,
+    items: 5
+  });
+}
 function searchSetup() {
   $.ajax({
     url: '/konfrap/user/all',
@@ -34,18 +46,16 @@ function searchSetup() {
     error: function (msg) {
       console.log(msg);
     },
-    success: function(data) {
-      for (var i = 0; i < data.length; i++) {
-        var x = data[i];
-        names.push($.trim(x.name));
-        ids.push(x.id);
-        searchtypes.push(x.ltype);
-      }
-      $('#friend-search').typeahead({
-        source: names,
-        items: 5
-      });
-    }
+    success: setUpSearch
+  });
+  $.ajax({
+    url: '/konfrap/debate/all',
+    type: 'GET',
+    dataType: 'json',
+    error: function (msg) {
+      console.log(msg);
+    },
+    success: setUpSearch
   });
   $('#friend-search').keypress(function(evt) {
     if (evt.which != 13) return true;
@@ -53,8 +63,11 @@ function searchSetup() {
       var sname = $(this).val();
       var i = $.inArray(sname, names);
       if (i != -1) {
-        if (searchtypes[i] == 'u') window.location = '/konfrap/user/home/' + ids[i] + '/2';
-        else  window.location = 'debate.php?debid=' + ids[i];
+        if (searchtypes[i] == 'u') {
+          window.location = '/konfrap/user/home/' + ids[i] + '/2';
+        } else {
+          window.location = '/konfrap/debate/' + ids[i];
+        }
       } else {
         $(this).val('');
       }
@@ -82,7 +95,18 @@ function renderOverlay(id, heading, code) {
   });
   $(id).modal('show');
 }
-
+function resolveIds() {
+  $('.resolve').each(function () {
+    var elt = $(this);
+    $.ajax({
+      url: 'https://graph.facebook.com/' + elt.html(),
+      dataType: 'json',
+      success: function (data) {
+        elt.html(data.name);
+      }
+    });
+  });
+}
 function nameFromId(elmt, fbid) {
   $.ajax({
     url: 'https://graph.facebook.com/' + fbid,
@@ -119,6 +143,7 @@ function showLoadingModal() {
 $(function () {
   //addDivider();
   searchSetup();
+  resolveIds();
   $('.tip').each(function() {$(this).tooltip(); });
 });
 init();

@@ -5,6 +5,11 @@ class Debate_model extends CI_Model {
     $this->load->database();
   }
   
+  public function get_debates() {
+    $query = $this->db->get('debates');
+    return $query->result_array();
+  }
+  
   public function add_followers($debate_id, $followers) {
     $data = array(
               'debate_id'   =>  $debate_id
@@ -96,6 +101,26 @@ class Debate_model extends CI_Model {
       array_push($themes, $row['theme']);
     }
     return $themes;
+  }
+  
+  function get_followers($id) {
+    $this->db->select('follower_fbid');
+    $query = $this->db->get_where('debate_followers', array('debate_id'  =>  $id));
+    $followers = array();
+    foreach ($query->result_array() as $row) {
+      array_push($followers, $row['follower_fbid']);
+    }
+    return $followers;
+  }
+  
+  function get_participants($id) {
+    $this->db->select('participant_fbid');
+    $query = $this->db->get_where('debate_participants', array('debate_id'  =>  $id));
+    $participants = array();
+    foreach ($query->result_array() as $row) {
+      array_push($participants, $row['participant_fbid']);
+    }
+    return $participants;
   }
   
   public function edit_field($id, $name, $value) {

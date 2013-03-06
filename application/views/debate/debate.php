@@ -17,5 +17,34 @@
         </ul>
       </div>
     </div>
+    
+    <table class="d-details">
+      <tbody>
+        <tr>
+          <td><span class="stats">Created by:</span></td>
+          <td>
+            <?php
+            echo anchor('user/home/'. $creator .'2',
+                        '<span class="resolve">' . $creator . '</span>');
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="stats"># Followers:</span></td>
+          <td><?php echo $num_followers;?></td>
+        </tr>
+        <tr>
+          <td><span class="stats">Created:</span></td>
+          <td><?php echo $time;?></td>
+        </tr>
+        
+        <tr>
+          <td><span class="stats">Debate Points:</span></td>
+          <td><?php echo $score;?></td>
+        </tr>
+        
+      </tbody>
+    </table>
+    
   </div>
 </div>

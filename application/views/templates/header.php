@@ -1,5 +1,5 @@
 <div id="header">
-  <span class="logo"><?php echo anchor('user', 'Konfrap');?></span>
+  <span class="logo"><?php echo anchor('user', 'konϝrap');?></span>
   <span class="search">
     <ul class="header-ul">
       <li class="search-form ui-front">
@@ -21,7 +21,7 @@
       <li><?php echo anchor('user/logout', 'Logout');?></li>
       
       <?php else: ?>
-      <li><?php echo anchor('user/login', 'Login');?></li>
+      <li><?php echo anchor($loginUrl, 'Login');?></li>
       
       <?php endif; ?>
     </ul>

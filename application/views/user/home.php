@@ -31,14 +31,16 @@
     <div class="engage">
     <?php if ($me): ?>
       <a title="Start a New debate" id="start"
-         class="btn btn-primary usr-engage-btn">Start a new debate</a><br/>
+         class="btn btn-custom usr-engage-btn">Start a new debate</a><br/>
       <a title="View my followers" id="my-followers" class="btn usr-engage-btn">My Followers</a><br/>
       <a title="View my followees" id="my-followees" class="btn usr-engage-btn">My Followees</a>
     <?php elseif ($signed_in): ?>
       <a title="Follow this user's activity" id="follow"
          class="btn <?php echo $fclass;?>"><?php echo $ftext;?></a><br/>
       <a title="Challenge to a debate" id="challenge"
-         class="btn usr-engage-btn2">Challenge</a>
+         class="btn btn-custom usr-engage-btn2">Challenge</a><br/>
+      <a title="View Followers" id="my-followers"
+         class="btn usr-engage-btn2">Followers</a>
     <?php endif; ?>
     </div>
   </div>
@@ -75,11 +77,10 @@
         <input type="hidden" name="participant-ids" title="Debate's Participants"
                id="participant-ids"/>
         
-        <button type="submit" class="btn btn-primary" id="start-debate">Start</button>
+        <button type="submit" class="btn btn-custom" id="start-debate">Start</button>
         <img src="/konfrap/assets/img/loading3.gif" alt="Loading"
              class="hide" id="start-loading" title="Loading"/>
       </form>
     </div>
   </div>
-</div>
 </div>

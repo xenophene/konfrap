@@ -1,11 +1,12 @@
 // global variables useful across files
-var names = [];
-var ids = [];
-var searchtypes = [];
+var names = [],
+    ids = [],
+    searchtypes = [],
 
-var friendIds = null;
-var friendNames = null;
-var themes = ['IIT Mess', 'IIT Politics', 'IIT Academics', 'IIT Hostels',
+    friendIds = null,
+    friendNames = null,
+    
+    themes = ['IIT Mess', 'IIT Politics', 'IIT Academics', 'IIT Hostels',
               'IIT Cultural Events', 'IIT Sports Events', 'Nation & Economy'];
 
 /* Library of common auxiliary functions that will be used by all the main
@@ -42,19 +43,12 @@ function searchSetup() {
   $.ajax({
     url: '/konfrap/user/all',
     type: 'GET',
-    dataType: 'json',
-    error: function (msg) {
-      console.log(msg);
-    },
     success: setUpSearch
   });
   $.ajax({
     url: '/konfrap/debate/all',
     type: 'GET',
     dataType: 'json',
-    error: function (msg) {
-      console.log(msg);
-    },
     success: setUpSearch
   });
   $('#friend-search').keypress(function(evt) {
@@ -132,6 +126,11 @@ function init() {
       for (var i = 0; i < result.data.length; i++) {
         friendNames.push(result.data[i].name);
         friendIds[result.data[i].name] = result.data[i].id;
+      }
+      if (typeof(ufbid) !== 'undefined' && myfbid !== ufbid &&
+          !friendIds[uname]) {
+        friendIds[uname] = ufbid;
+        friendNames.push(uname);
       }
     }
   });

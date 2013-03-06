@@ -42,6 +42,7 @@ class Debate extends CI_Controller {
       redirect('/user');
     }
     $fb = $this->session->userdata('fb');
+    $data['loginUrl'] = $fb['loginUrl'];
     $signed_in = ($fb['me'] != null) and $fb['fbid'];
     $data['signed_in'] = $signed_in;
     $data['name'] = $debate['topic'];
@@ -57,6 +58,16 @@ class Debate extends CI_Controller {
     $data['score'] = $debate['score'];
     $data['followers'] = $this->debate_model->get_followers($id);
     $data['num_followers'] = sizeof($data['followers']);
+    if (in_array($fb['fbid'], $data['followers'])) {
+      $data['fclass'] = 'btn-danger';
+      $data['ftext'] = 'Unfollow';
+    } else {
+      $data['fclass'] =  'btn-primary';
+      $data['ftext'] = 'Follow';
+    }
+    $data['participants'] = $this->debate_model->get_participants($id);
+    $data['is_participant'] = in_array($fb['fbid'], $data['participants']);
+    
     $time = strtotime($debate['startdate']);
     $data['time'] = date('j F Y', $time);
     
@@ -102,9 +113,17 @@ class Debate extends CI_Controller {
     $id = $this->input->post('pk');
     $name = $this->input->post('name');
     $value = $this->input->post('value');
-    
-    if ($id and $name and $value and $value !== '') {
+    $fb = $this->session->userdata('fb');
+    if ($fb['fbid'] and $id and $name and $value and $value !== '') {
       $this->debate_model->edit_field($id, $name, $value);
     }
+  }
+  
+  public function invite_friends() {
+    $inviter_id = $this->input->post('inviterId');
+    $debate_id = $this->input->post('id');
+    $invites = explode(',', $this->input->post('friendList'));
+    
+    $this->debate_model->set_invites($inviter_id, $debate_id, $invites);
   }
 }

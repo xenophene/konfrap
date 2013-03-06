@@ -254,130 +254,52 @@ function showConnections(evt) {
 }
 
 function invite_to_debate() {
-  var code = '<input type="text" name="participants" title="Participants" ' + 
-             'id="participants" class="input-xxlarge ui-autocomplete-input" ' +
-             'placeholder="Challenge Friends" autocomplete="off" spellcheck="false"/>';
-  code += '<a class="btn btn-primary" id="invite-friends">Invite</a>';
+	if (friendNames == null) return;
+	
+	var code = '<ul class="outline" id="participants"></ul>';
+  code += '<a class="btn btn-custom" id="invite-friends">Invite</a>';
   var heading = 'Invite Friends to debate';
   var id = '#overlay';
   renderOverlay(id, heading, code);
-  if (friendNames == null) {
-    $.ajax({
-      url: 'get-my-friends.php',
-      success: function(data) {
-        var result = JSON.parse(data);
-        var names = Array();
-        var ids = Array();
-        for (var i = 0; i < result.data.length; i++) {
-          names.push(result.data[i].name);
-          ids.push(result.data[i].id);
-        }
-        $( "#participants").autocomplete({
-				  minLength: 3,
-				  source: function( request, response ) {
-					  // delegate back to autocomplete, but extract the last term
-					  response( $.ui.autocomplete.filter(
-						  names, extractLast( request.term ) ) );
-				  },
-				  focus: function() {
-					  // prevent value inserted on focus
-					  return false;
-				  },
-				  select: function( event, ui ) {
-					  var terms = split( this.value );
-					  // remove the current input
-					  terms.pop();
-					  // add the selected item
-					  terms.push( ui.item.value );
-					  // add placeholder to get the comma-and-space at the end
-					  terms.push( "" );
-					  this.value = terms.join( ", " );
-					  return false;
-				  },
-				  maxResults: 4
-			  });
-        friendNames = names;
-        friendIds = ids;
-      }
-    });
-    // enable the participants file
-  }
-  else {
-    $( "#participants" ).autocomplete({
-	    minLength: 3,
-	    source: function( request, response ) {
-		    // delegate back to autocomplete, but extract the last term
-		    response( $.ui.autocomplete.filter(
-			    friendNames, extractLast( request.term ) ) );
-	    },
-	    focus: function() {
-		    // prevent value inserted on focus
-		    return false;
-	    },
-	    select: function( event, ui ) {
-		    var terms = split( this.value );
-		    // remove the current input
-		    terms.pop();
-		    // add the selected item
-		    terms.push( ui.item.value );
-		    // add placeholder to get the comma-and-space at the end
-		    terms.push( "" );
-		    this.value = terms.join( ", " );
-		    return false;
-	    },
-	    maxResults: 4
-    });
-  }
-  $('#invite-friends').click(inviteFriends);
+	
+	$('#participants').tagit({
+		removeConfirmation: true,
+		allowSpaces: true,
+		placeholderText: 'Add participants...',
+		availableTags: friendNames,
+		autocomplete: {
+			source: function(request, response) {
+        var results = $.ui.autocomplete.filter(friendNames, request.term);
+        response(results.slice(0, 10));
+			},
+			delay: 100,
+			minLength: 2
+		}
+	});
+  $('#invite-friends').click(function () {
+		var participants = $('#participants').tagit('assignedTags');
+		var indexes = [];
+		participants.map(function (e) {
+				indexes.push(friendIds[e]);
+		});
+		$.ajax({
+			url:  '/konfrap/debate/invite_friends',
+			type: 'POST',
+			data: {
+				'id': debid,
+				'friendList': indexes.join(),
+				'inviterId': myfbid
+			}
+		});
+		$('#overlay').modal('hide');
+	});
+	
 }
-// send notifications to my friends and add them as participants
-function inviteFriends() {
-  var participants = $('#participants').val().split(',');
-  var names = [];
-  var ids = [];
-  var j = 0;
-  for (var i = 0; i < participants.length - 1; i++) {
-    var s = $.trim(participants[i]);
-    var index = $.inArray(s, friendNames);
-    if (index != -1) {
-      ids[j] = friendIds[index];
-      names[j] = s;
-      j++;
-    }
-  }
-  $.ajax({
-    url: 'ajax_scripts.php',
-    type: 'POST',
-    data: {
-      fid: '4',
-      ids: ids.join(','),
-      idNames: names.join(','),
-      debid: debid,
-      inviterName: myname,
-      inviterId: userid
-    },
-    success: function (data) {
-      console.log(data);
-    }
-  });
-  $('#overlay').modal('hide');
-}
-function editDescription() {
-  var para = $('#desc-data');
-  var descOrig = para.html().trim();
-  var width = para.css('width');
-  para.html('<textarea></textarea>');
-  var textarea = para.children('textarea');
-  textarea.css('width', width);
-  textarea.val(descOrig);
-  textarea.autosize();
-}
-
 
 $('.editable').each(function () {
 	var field_type,
 			id;
-		
+	if ( ! signed_in) return;
 	id = $(this).attr('name');
 	
 	if ($(this).hasClass('topic')) {
@@ -507,8 +429,9 @@ function desanitize() {
 function setUpThemeTags() {
 	$('#theme-tags').tagit({
 		removeConfirmation: true,
+		readOnly: signed_in ? false : true,
 		allowSpaces: true,
-		placeholderText: 'add more themes...',
+		placeholderText: signed_in ? 'add more themes...' : '',
 		availableTags: themes,
 		autocomplete: {
 			source: function(request, response) {

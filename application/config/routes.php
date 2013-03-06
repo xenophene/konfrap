@@ -51,6 +51,7 @@ $route['debate/create'] = 'debate/create';
 $route['debate/all'] = 'debate/all';
 $route['debate/add_theme'] = 'debate/add_theme';
 $route['debate/remove_theme'] = 'debate/remove_theme';
+$route['debate/invite_friends'] = 'debate/invite_friends';
 $route['debate/edit_field'] = 'debate/edit_field';
 $route['debate/(:any)'] = 'debate/index/$1';
 

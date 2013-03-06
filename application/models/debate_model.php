@@ -130,4 +130,16 @@ class Debate_model extends CI_Model {
     $this->db->where(array('id'   =>  $id));
     $this->db->update('debates', $data);
   }
+  
+  public function set_invites($inviter_id, $debate_id, $invites) {
+    $data = array(
+                  'inviter_fbid'  =>  $inviter_id,
+                  'debate_id'     =>  $debate_id
+                );
+    
+    foreach ($invites as $invite) {
+      $data['invitee_fbid'] = $invite;
+      $this->db->insert('invites', $data);
+    }
+  }
 }

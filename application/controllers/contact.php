@@ -38,9 +38,12 @@ class Contact extends CI_Controller {
   public function feedback() {
     $fb = $this->session->userdata('fb');
     
-    $email = $this->input->get('email');
-    $feedback = $this->input->get('feedback');
-    $this->contact_model->add_feedback($email, $feedback);
+    $email = $this->input->post('email');
+    $feedback = $this->input->post('feedback');
+		if ($email and $feedback) {
+			$this->contact_model->add_feedback($email, $feedback);
+		}
+		
     $data['signed_in'] = ($fb['me'] != null) and $fb['fbid'];
     $data['name'] = 'Feedback';
     $this->load->view('templates/prologue', $data);

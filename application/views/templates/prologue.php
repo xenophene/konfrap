@@ -14,6 +14,7 @@ echo meta($meta);
 <title><?php echo $name; ?> | Konfrap</title>
 <?php
 
+echo link_tag('http://fonts.googleapis.com/css?family=Nunito');
 echo link_tag('assets/css/bootstrap.min.css');
 echo link_tag('assets/css/style.css');
 echo link_tag('assets/css/bootstrap-editable.css');

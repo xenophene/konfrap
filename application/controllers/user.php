@@ -60,13 +60,18 @@ class User extends CI_Controller {
     $data['myfbid'] = $fb['fbid'];
     $data['name'] = $user['name'];
     $data['fb'] = $fb;
+    $data['loginUrl'] = $fb['loginUrl'];
     $data['signed_in'] = $signed_in;
     $data['me'] = ($signed_in and ($fb['fbid'] === $user['fbid']));
     $data['user_profile'] = $user;
-    $data['fclass'] = in_array($fb['fbid'], $data['followers']) ?
-                      'btn-danger' : 'btn-primary';
-    $data['ftext'] = in_array($fb['fbid'], $data['followers']) ?
-                      'Unfollow' : 'Follow';
+    
+    if (in_array($fb['fbid'], $data['followers'])) {
+      $data['fclass'] = 'btn-danger';
+      $data['ftext'] = 'Unfollow';
+    } else {
+      $data['fclass'] =  'btn-primary';
+      $data['ftext'] = 'Follow';
+    }
     
     $data['updates'] = array(array('heading' => 'update heading', 'body' => 'body'));
     $this->load->view('templates/prologue', $data);

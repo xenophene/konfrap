@@ -1,7 +1,10 @@
 <script>
   <?php echo "
     var myfbid = '$myfbid';
-    var debid = '". $id ."';
+    var debid = '$id';
+    var signed_in = '$signed_in';
+    var participantIds = ". json_encode($participants) .";
+    var followerIds = ". json_encode($followers) .";
   ";
   ?>
 </script>

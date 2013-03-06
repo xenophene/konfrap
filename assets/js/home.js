@@ -23,7 +23,7 @@ function setUpTypeahead() {
 	$('#start-debate-form').modal('show');
 }
 function defineDebate() {
-	
+	clearDebateForm();
   $( "#debate-theme" ).tagit({
     removeConfirmation: true,
 		allowSpaces: true,
@@ -50,6 +50,10 @@ function defineDebate() {
           friendNames.push(result.data[i].name);
 					friendIds[result.data[i].name] = result.data[i].id;
         }
+				if (myfbid !== ufbid && !friendIds[uname]) {
+					friendIds[uname] = ufbid;
+					friendNames.push(uname);
+				}
 				setUpTypeahead();
       }
     });
@@ -62,11 +66,7 @@ $('#start-debate-form form').submit(function() {
 	var participants = $('#participants').tagit('assignedTags');
   var indexes = [];
 	participants.map(function (e) {
-		if (e in friendIds) {
 			indexes.push(friendIds[e]);
-		} else {
-			indexes.push(ufbid);
-		}
 	});
   $('#debate-desc').val($('#debate-desc').val().replace(/(^,)|(,$)/g, ""));
   $('#participants-names').val(participants.join());

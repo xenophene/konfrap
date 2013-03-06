@@ -3,7 +3,7 @@
     <h2>Feedback</h2>
     
     <fieldset>
-      <form class="form-horizontal">
+      <form method="POST" class="form-horizontal">
         <div class="control-group">
           <label class="control-label" for="email">Email</label>
           <div class="controls">

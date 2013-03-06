@@ -24,7 +24,7 @@
           <td><span class="stats">Created by:</span></td>
           <td>
             <?php
-            echo anchor('user/home/'. $creator .'2',
+            echo anchor('user/home/'. $creator,
                         '<span class="resolve">' . $creator . '</span>');
             ?>
           </td>
@@ -45,6 +45,23 @@
         
       </tbody>
     </table>
+    
+    <div class="engage">
+      <?php if ($signed_in): ?>
+      
+      <a title="Follow Debate" id="follow-debate" class="btn <?php echo $fclass;?> engage-btn">
+      <?php echo $ftext;?></a><br/>
+      <a title="Invite friends to this debate" id="invite-to-debate"
+         class="btn btn-custom engage-btn">Invite Friends</a><br/>
+      
+      <?php else: ?>
+      <a href="<?php echo $loginUrl; ?>" class="btn btn-custom engage-btn">Sign in</a><br/>
+      
+      <?php endif; ?>
+      
+      <a title="See all participants" id="view-participants" class="btn engage-btn">Participants</a><br/>
+      <a title="See all followers" id="view-followers" class="btn engage-btn">Followers</a>
+    </div>
     
   </div>
 </div>

@@ -42,12 +42,11 @@ function setUpSearch(data) {
 function searchSetup() {
   $.ajax({
     url: '/konfrap/user/all',
-    type: 'GET',
+    dataType: 'json',
     success: setUpSearch
   });
   $.ajax({
     url: '/konfrap/debate/all',
-    type: 'GET',
     dataType: 'json',
     success: setUpSearch
   });

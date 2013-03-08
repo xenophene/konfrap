@@ -1,8 +1,7 @@
 <div id="main">
   <div id="prominent">
     <a href="<?php echo '/konfrap/user/home/'. $user_profile['fbid']; ?>">
-      <img class="pic" src="<?php echo '//graph.facebook.com/'.
-      $user_profile['fbid'] .'/picture?type=normal';?>"/>
+      <img class="pic" src="//graph.facebook.com/<?php echo $user_profile['fbid'];?>/picture?type=normal"/>
     </a>
     <table class="name-table">
       <thead>

@@ -12,7 +12,6 @@
     <table>
       <tbody>
         <tr>
-          <td class="contain-interest"><span id="interested-in" class="details">interested in:</span></td>
           <td name="<?php echo $user_profile['fbid'];?>" class="tag-elements">
             <ul title="Interest Tags" id="interest-tags">
               <?php foreach ($interests as $interest): ?>
@@ -44,15 +43,24 @@
     <?php endif; ?>
     </div>
   </div>
-  
-  <div class="updates">
-    <h3>Updates</h3>
-    <?php foreach ($updates as $update): ?>
-    <div class="update">
-      <div class="heading"><?php echo $update['heading'];?></div>
-      <div class="body"><?php echo $update['body'];?></div>
+  <div class="home-body">
+    <ul class="nav nav-pills user-tabs">
+      <li class="active"><a href="#updates" data-toggle="pill">
+        <?php if (!$me) echo $myname;?> Updates
+      </a></li>
+      <li><a href="#my-debates" data-toggle="pill"><?php echo $myname;?> Debates</a></li>
+      <?php if ($me): ?>
+      <li><a href="#popular-debates" data-toggle="pill">Popular Debates</a></li>
+      <?php endif; ?>
+    </ul>
+    
+    <div class="tab-content">
+      <div class="tab-pane active" id="updates">
+        <h4>Updates</h4>
+      </div>
+      <div class="tab-pane" id="my-debates"></div>
+      <div class="tab-pane" id="popular-debates"></div>
     </div>
-    <?php endforeach; ?>
   </div>
   
   <div id="start-debate-form" class="modal hide">

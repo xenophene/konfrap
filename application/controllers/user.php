@@ -59,10 +59,12 @@ class User extends CI_Controller {
     $data['followees'] = $this->user_model->get_followees($user['fbid']);
     $data['myfbid'] = $fb['fbid'];
     $data['name'] = $user['name'];
+    
     $data['fb'] = $fb;
     $data['loginUrl'] = $fb['loginUrl'];
     $data['signed_in'] = $signed_in;
     $data['me'] = ($signed_in and ($fb['fbid'] === $user['fbid']));
+    $data['myname'] = $data['me'] ? 'My' : $data['name'] . "'s";
     $data['user_profile'] = $user;
     
     if (in_array($fb['fbid'], $data['followers'])) {

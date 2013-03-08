@@ -15,6 +15,7 @@ body {
 a {
   text-decoration: none;
   outline: none;
+  color: #415871;
 }
 #header {
   background: #415871;
@@ -196,6 +197,20 @@ span.stats {
 ul {
   margin: 0 0 5px 0;
   padding: 0 0 0 4px;
+}
+.home-body {
+  padding: 10px 0 0 5px;
+}
+.user-tabs {
+  padding: 0 0 20px 0;
+  margin: 0;
+}
+.user-tabs>li {
+  padding: 0 10px 0 0;
+}
+.user-tabs-data-element {
+  margin: 5px 0 5px 0;
+  border-bottom: solid 1px #eee;
 }
 .outline {
   border: solid 1px #aaa;

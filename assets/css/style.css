@@ -202,15 +202,11 @@ ul {
   padding: 10px 0 0 5px;
 }
 .user-tabs {
-  padding: 0 0 20px 0;
+  padding: 0 0 10px 0;
   margin: 0;
 }
 .user-tabs>li {
   padding: 0 10px 0 0;
-}
-.user-tabs-data-element {
-  margin: 5px 0 5px 0;
-  border-bottom: solid 1px #eee;
 }
 .outline {
   border: solid 1px #aaa;
@@ -220,23 +216,23 @@ ul {
   max-width: 400px;
   margin: 0;
 }
-.updates {
+.feed-list {
   position: relative;
   width: 800px;
-  padding: 10px;
 }
-.update {
-  padding: 20px;
+.feed-block {
+  padding: 10px 0 5px 0;
   margin: 0;
   font-size: 13px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #efefef;
 }
-.update .heading {
+.feed-block .heading {
   font-weight: bold;
+  font-size: 14px;
   color: #333;
 }
-.update .body {
-  color: #666;
+.feed-block .body {
+  color: #555;
 }
 
 #content {
@@ -324,10 +320,6 @@ ul {
   text-decoration: underline;
 }
 
-b {
-  /*color: #D14836;*/
-  color: #00349C;
-}
 #radio, #radio2 {
 }
 p.emph {

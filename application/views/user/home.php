@@ -54,11 +54,26 @@
     </ul>
     
     <div class="tab-content">
-      <div class="tab-pane active" id="updates">
-        <h4>Updates</h4>
+      <div class="tab-pane active feed-list" id="updates">
+        
       </div>
-      <div class="tab-pane" id="my-debates"></div>
-      <div class="tab-pane" id="popular-debates"></div>
+      <div class="tab-pane feed-list" id="my-debates">
+      <?php foreach ($my_debates as $my_debate): ?>
+        <div class="feed-block">
+          <div class="heading">
+            <?php echo anchor('debate/' . $my_debate['id'],
+                              $my_debate['topic']);
+            ?>
+          </div>
+          <div class="body">
+            <?php echo $my_debate['description'];?>
+          </div>
+        </div>
+        <?php endforeach; ?>
+      </div>
+      <div class="tab-pane feed-block" id="popular-debates">
+        
+      </div>
     </div>
   </div>
   

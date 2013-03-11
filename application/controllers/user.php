@@ -8,6 +8,7 @@ class User extends CI_Controller {
     parent::__construct();
     $this->load->model('facebook_model');
     $this->load->model('user_model');
+    $this->load->model('debate_model');
     $this->load->helper('url');
     $this->load->helper('html');
   }
@@ -57,6 +58,7 @@ class User extends CI_Controller {
     $data['interests'] = $this->user_model->get_interests($user['id']);
     $data['followers'] = $this->user_model->get_followers($user['fbid']);
     $data['followees'] = $this->user_model->get_followees($user['fbid']);
+    $data['my_debates'] = $this->debate_model->get_debates_followed_by($user['fbid']);
     $data['myfbid'] = $fb['fbid'];
     $data['name'] = $user['name'];
     

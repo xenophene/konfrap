@@ -142,4 +142,36 @@ class Debate_model extends CI_Model {
       $this->db->insert('invites', $data);
     }
   }
+  
+  public function get_debates_followed_by($follower_fbid) {
+    $this->db->select('debate_id');
+    $query = $this->db->get_where('debate_followers',
+                                  array('follower_fbid'   =>  $follower_fbid));
+    
+    $debates = array();
+    foreach ($query->result_array() as $row) {
+      $query = $this->db->get_where('debates',
+                                    array('id' =>  $row['debate_id']));
+      array_push($debates, $query->row_array());
+    }
+    return $debates;
+  }
+  
+  public function set_follower($id, $follower_fbid) {
+    $data = array(
+              'debate_id'       =>  $id,
+              'follower_fbid'   =>  $follower_fbid
+            );
+    
+    $query = $this->db->insert('debate_followers', $data);
+  }
+  
+  public function unset_follower($id, $follower_fbid) {
+    $data = array(
+              'debate_id'       =>  $id,
+              'follower_fbid'   =>  $follower_fbid
+            );
+    
+    $query = $this->db->delete('debate_followers', $data);
+  }
 }

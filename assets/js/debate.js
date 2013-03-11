@@ -377,21 +377,26 @@ function popovers() {
   $('.theme').tooltip();
 }
 /* follow debate */
-function followDebate() {
+function auxFollowDebate(elmt, oldClassName, newClassName, fCode, htmlCode) {
+  elmt.removeClass(oldClassName);
+  elmt.addClass(newClassName);
+  elmt.html(htmlCode);
+  /* send follow AJAX request */
+  $.ajax({
+    url: '/konfrap/debate/' + fCode,
+    type: 'POST',
+    data: {
+      'follower': myfbid,
+      'debate_id': debid
+    }
+  });
+}
+function followDebate () {
   if ($(this).hasClass('btn-primary')) {
-    $(this).removeClass('btn-primary');
-    $(this).addClass('btn-danger');
-    $(this).addClass('disabled');
-    $(this).html('Following');
-    $.ajax({
-      url: 'includes/ajax_script.php',
-      type: 'POST',
-      data: {
-				fid: 7,
-				follower: user,
-				debid: debid
-			}
-    });
+    auxFollowDebate($(this), 'btn-primary', 'btn-danger', 'follow', 'Unfollow');
+  }
+  else {
+    auxFollowDebate($(this), 'btn-danger', 'btn-primary', 'unfollow', 'Follow');
   }
 }
 function show_format_rules() {

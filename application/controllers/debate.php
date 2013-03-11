@@ -126,4 +126,18 @@ class Debate extends CI_Controller {
     
     $this->debate_model->set_invites($inviter_id, $debate_id, $invites);
   }
+  
+  public function unfollow() {
+    $follower_fbid = $this->input->post('follower');
+    $id = $this->input->post('debate_id');
+    
+    $this->debate_model->unset_follower($id, $follower_fbid);
+  }
+  
+  public function follow() {
+    $follower_fbid = $this->input->post('follower');
+    $id = $this->input->post('debate_id');
+    
+    $this->debate_model->set_follower($id, $follower_fbid);
+  }
 }

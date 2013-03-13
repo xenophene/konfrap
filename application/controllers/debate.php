@@ -34,6 +34,7 @@ class Debate extends CI_Controller {
   }
   
   public function index($id = FALSE) {
+    
     if ( ! $id) {
       redirect('/user');
     }
@@ -47,6 +48,7 @@ class Debate extends CI_Controller {
     $data['signed_in'] = $signed_in;
     $data['name'] = $debate['topic'];
     
+  
     $this->load->view('templates/prologue', $data);
     $this->load->view('templates/header', $data);
     

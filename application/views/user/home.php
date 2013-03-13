@@ -55,7 +55,7 @@
     
     <div class="tab-content">
       <div class="tab-pane active feed-list" id="updates">
-        
+      
       </div>
       <div class="tab-pane feed-list" id="my-debates">
       <?php foreach ($my_debates as $my_debate): ?>

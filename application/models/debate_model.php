@@ -14,7 +14,7 @@ class Debate_model extends CI_Model {
     $data = array(
               'debate_id'   =>  $debate_id
             );
-    
+    //why not array always?
     if (is_array($followers)) {
       foreach ($followers as $follower) {
         $data['follower_fbid'] = $follower;

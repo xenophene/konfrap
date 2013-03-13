@@ -61,6 +61,7 @@ $route['contact/feedback'] = 'contact/feedback';
 $route['contact/join_us'] = 'contact/join_us';
 $route['contact/about'] = 'contact/about';
 
+$route['update'] = 'update/index';
 $route['default_controller'] = 'user/home';
 
 /* End of file routes.php */

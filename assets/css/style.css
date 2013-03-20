@@ -14,7 +14,7 @@ body {
 }
 a {
   text-decoration: none;
-  outline: none;
+  outline: none !important;
   color: #415871;
 }
 #header {
@@ -175,7 +175,6 @@ div.desc {
   overflow-y: auto;
 }
 div.deb-themes {
-  font-style: italic;
   margin-top: 4px;
 }
 .d-details {
@@ -233,6 +232,10 @@ ul {
 }
 .feed-block .body {
   color: #555;
+}
+.feed-block .footer {
+  margin: 5px 0 0 0;
+  color: #777;
 }
 
 #content {
@@ -313,7 +316,7 @@ ul {
   padding: 0 5px 0 0px;
 }
 
-.upvote, .downvote, .support-point, .rebutt-point, .delete-point, .votes, .comment-date {
+.pointer {
   cursor: pointer;
 }
 .support-point:hover, .rebutt-point:hover, .delete-point:hover, .votes:hover, .comment-date:hover {

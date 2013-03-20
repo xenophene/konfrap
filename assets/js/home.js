@@ -146,24 +146,17 @@ function followUser () {
 
 /* delete Debate will take the debate and remove myself from the participant list */
 function debateDelete() {
-  $('.delete-debate').tooltip('hide');
-  var debid = $(this).parent().parent().children('td.dname').attr('id');
+  var debid = $(this).parent().parent().attr('id');
   $.ajax({
-    url: 'includes/ajax_scripts.php',
+    url: '/konfrap/debate/unfollow',
     type: 'POST',
     data: {
-      fid: 6,
-      debid: debid,
-      user: myfbid
+      debate_id: debid,
+      follower: myfbid
     }
   });
   $(this).parent().parent().fadeOut();
   $(this).parent().parent().remove();
-  if (!$('.debate-table tbody').children().size()) { // remove the tbody
-    $('.debate-table tbody').append('<tr id="nill"><td>You ' +
-																		"don't have any ongoing debates right now</td></tr>");
-    $('.debate-table thead').html('');
-  }
 }
 
 /* clear Overlay */
@@ -303,20 +296,20 @@ function setUpInterests() {
 $(function() {
   clearDebateForm();
   $('#start').click(defineDebate);
-  $('#start-debate-form input').keyup(function() {
-    if ($('#debate-topic').val().length > 5 && $('#participants').val().length > 3)
-      $('#start-debate').removeAttr('disabled');
-  });
-  $('#post-to-fb').click(postFb);
   $('#start-debate-form').on('hidden', clearDebateForm);
   $('#challenge').click(defineChallengeDebate);
   $('#follow').click(followUser);
-  $('#radio').buttonset();
-  $('#radio2').buttonset();
   $('.delete-debate').click(debateDelete);
-  $('#my-followers').click({p: '1'}, showConnections);
-  $('#my-followees').click({p: '2'}, showConnections);
-  //popovers();
-	//setEditable();
+	
+  $('#my-followers').click({
+			text: 'Followers',
+			ids: followers
+		}, k.showConnections
+	);
+  $('#my-followees').click({
+			text: 'Followees',
+			ids: followees
+		}, k.showConnections
+	);
 	setUpInterests();
 });

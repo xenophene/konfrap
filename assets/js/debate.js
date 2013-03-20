@@ -235,24 +235,6 @@ function rebutt_point() {
   */
 }
 
-/* view participants for this debate */
-function showConnections(evt) {
-  /* render the layover and show the list of friends */
-  var pids = evt.data.p == 1 ? participantIds : followerIds;
-  var heading = evt.data.p == 1 ? 'Participants' : 'Followers';
-  
-  var code = '<ul>';
-  var n = pids.length;
-  for (var i = 0; i < pids.length; i++) {
-    code += '<li id="' + pids[i] + '"><a target="_blank" href="home.php?fbid=' + 
-            pids[i] + '"><img id="' + pids[i] + '" src="https://graph.facebook.com/' + 
-            pids[i] + '/picture"/></a></li>';
-  }
-  code += '</ul>';
-  var id = '#overlay';
-  renderOverlay(id, heading, code);
-}
-
 function invite_to_debate() {
 	if (friendNames == null) return;
 	
@@ -309,73 +291,17 @@ $('.editable').each(function () {
 	}
 	
 	$(this).editable({
-		mode:	'inline',
 		placement: 'bottom',
-		inputclass: 'input-xlarge',
 		type: 'textarea',
 		pk:		id,
 		name: field_type,
 		url:	'/konfrap/debate/edit_field/',
-		title:	'Enter ' + field_type
+		title:	'Modify ' + field_type
 	});
 	
 });
 
 
-
-// view conversation starting from this conversation upwards following parent
-// pointers
-function viewConversation() {
-  var thisComid = $(this).parent().attr('name');
-  var code = '<div class="comment">';
-  code += '<span class="author">' + 
-          $(this).parent().children('.author').html() + '</span>';
-  code += '<span class="comment-data">' + 
-          $(this).parent().children('.comment-data').html() + '</span>';
-  code += '</div>';
-  var parentId = $(this).attr('name');
-  var heading = 'View Full Conversation';
-  while (parentId) {
-    var parentDiv = $('.comment[name=' + parentId + ']');
-    parentId = parentDiv.children('.view-conversation').attr('name');
-    var pcode = '<div class="comment">';
-    pcode += '<span class="author">' + 
-            parentDiv.children('.author').html() + '</span>';
-    pcode += '<span class="comment-data">' + 
-            parentDiv.children('.comment-data').html() + '</span>';
-    pcode += '</div>';
-    code = pcode + code;
-  }
-  var id = '#overlay';
-  renderOverlay(id, heading, code);
-  console.log(code);
-}
-function popovers() {
-  $('#invite-to-debate').popover({
-    title: 'Invite friends to debate',
-    content: 'Promote this debate among your friends allowing them to participate and contribute to the debate.',
-    placement: 'left'
-  });
-  $('#follow-debate').popover({
-    title: 'Follow Debate',
-    content: 'Follow this debate to stay updated with who said what.',
-    placement: 'left'
-  });
-  $('#friend-search').tooltip({
-    title: 'Search Debaters on IIT Debates',
-    placement: 'left'
-  });
-  $('.view-conversation').tooltip({
-    title: 'This post is part of a conversation. View the enter conversation'
-  });
-  $('.add').tooltip();
-  $('.vote-store').tooltip();
-  $('.comment-date').tooltip();
-  $('.delete-point').tooltip();
-  $('.support-point').tooltip();
-  $('.rebutt-point').tooltip();
-  $('.theme').tooltip();
-}
 /* follow debate */
 function auxFollowDebate(elmt, oldClassName, newClassName, fCode, htmlCode) {
   elmt.removeClass(oldClassName);
@@ -394,41 +320,12 @@ function auxFollowDebate(elmt, oldClassName, newClassName, fCode, htmlCode) {
 function followDebate () {
   if ($(this).hasClass('btn-primary')) {
     auxFollowDebate($(this), 'btn-primary', 'btn-danger', 'follow', 'Unfollow');
+		followerIds.push(myfbid);
   }
   else {
     auxFollowDebate($(this), 'btn-danger', 'btn-primary', 'unfollow', 'Follow');
+		followerIds.splice(followerIds.indexOf(myfbid), 1);
   }
-}
-function show_format_rules() {
-  if ($(this).parent().find('.rules').length != 0)
-    return;
-  var code = '<div class="rules">';
-  code += '<h4>Thank you for contributing your point of view.</h4>';
-  code += '<p>Please be impartial, rational and logical in your view points. This is an open and democratic forum and all sides have an equal say. You can highlight your content using these options.</p>';
-  code += '<p><ol>';
-  code += '<li>Bold - Wrap text by **</li>';
-  code += '<li>Emphasize - Wrap text by *</li>';
-  code += '<li>Links - Just add the link</li>';
-  code += '</ol></p></div>';
-  code = $(code).hide();
-  code.insertBefore($(this)).slideDown();
-}
-function hide_format_rules() {
-  $('.rules').slideUp("normal", function() { $(this).remove(); } );
-}
-function formatString(str) {
-	str = marked(str);
-	return str;
-}
-// desanitize will try to add formatting elements to the text
-function desanitize() {
-  // for all the comments, run marked
-  $('.comment .comment-data').each(function () {
-    var newcomm = formatString($(this).html());
-    $(this).html(newcomm);
-  });
-  var desc = $('.desc').html();
-  $('.desc').html(desc);
 }
 
 function setUpThemeTags() {
@@ -472,54 +369,17 @@ function setUpThemeTags() {
 }
 $(function() {
 	
-  //$('textarea.yes, textarea.no').autosize();
-  $('.upvote').click(upvote);
-  $('.downvote').click(downvote);
-  $('.support-point').click(support_point);
-  $('.rebutt-point').click(rebutt_point);
-  $('.delete-point').click(deletePoint);
-  $('.vote-store').click(showVoters);
-  $('.view-conversation').click(viewConversation);
-  $('#post-yes').click(post_yes);
-  $('#post-no').click(post_no);
-  $('#view-participants').click({p: 1}, showConnections);
-  $('#view-followers').click({p: 2}, showConnections);
+  $('#view-participants').click({
+			text: 'Participants',
+			ids:	participantIds
+		}, k.showConnections
+	);
+  $('#view-followers').click({
+			text: 'Followers',
+			ids: followerIds
+		}, k.showConnections
+	);
   $('#invite-to-debate').click(invite_to_debate);
   $('#follow-debate').click(followDebate);
-  //$('#edit-desc').click(editDescription);
-  $('textarea.yes, textarea.no').focus(show_format_rules);
-  $('textarea.yes, textarea.no').blur(hide_format_rules);
-  $('textarea.yes, textarea.no').keyup(function() {
-    if ($(this).val().length > 0) {
-      if ($(this).attr('class') == 'yes') {
-        $('#post-yes').removeAttr('disabled');
-      } else {
-        $('#post-no').removeAttr('disabled');
-      }
-    } else {
-      if ($(this).attr('class') == 'yes') {
-        $('#post-yes').attr('disabled', 'disabled');
-      } else {
-        $('#post-no').attr('disabled', 'disabled');
-      }
-    }
-  });
-	/*
-  marked.setOptions({
-    gfm: true,
-    pedantic: false,
-    sanitize: true,
-    // callback for code highlighter
-    highlight: function(code, lang) {
-      if (lang === 'js') {
-        return javascriptHighlighter(code);
-      }
-      return code;
-    }
-  });
-  */
-  desanitize();
-  //popovers();
-	
 	setUpThemeTags();
 });

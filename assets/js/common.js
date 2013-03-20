@@ -1,4 +1,5 @@
 // global variables useful across files
+var k = {};
 var names = [],
     ids = [],
     searchtypes = [],
@@ -138,8 +139,27 @@ function showLoadingModal() {
   var loadingImg = '<img src="/konfrap/assets/img/loading3.gif">';
   renderOverlay('#overlay', '<h2>Loading...</h2>', loadingImg);
 }
+
+k.showConnections = function (evt) {
+  var pids = evt.data.ids,
+      heading = evt.data.text;
+  
+  var code = '<ul>',
+      id = '#overlay',
+      n = pids.length;
+      
+  for (var i = 0; i < pids.length; i++) {
+    code += '<li id="' + pids[i] + '"><a target="_blank" href="home.php?fbid=' + 
+            pids[i] + '"><img id="' + pids[i] + '" src="https://graph.facebook.com/' + 
+            pids[i] + '/picture"/></a></li>';
+  }
+  
+  code += '</ul>';
+  
+  renderOverlay(id, heading, code);
+};
+
 $(function () {
-  //addDivider();
   searchSetup();
   resolveIds();
   $('.tip').each(function() {$(this).tooltip(); });

@@ -97,7 +97,7 @@ class User_model extends CI_Model {
             );
     $this->db->insert('user_followers', $data);
   }
-  public function rem_follower($follower = null, $followee = null) {
+  public function unset_follower($follower = null, $followee = null) {
     $data = array(
               'follower'    =>  $follower,
               'followee'    =>  $followee

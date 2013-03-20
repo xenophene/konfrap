@@ -58,8 +58,15 @@
         
       </div>
       <div class="tab-pane feed-list" id="my-debates">
-      <?php foreach ($my_debates as $my_debate): ?>
+      <?php if (empty($my_debates)): ?>
         <div class="feed-block">
+          <div class="heading">
+            No debates followed.
+          </div>
+        </div>
+      <?php endif; ?>
+      <?php foreach ($my_debates as $my_debate): ?>
+        <div class="feed-block" id="<?php echo $my_debate['id'];?>">
           <div class="heading">
             <?php echo anchor('debate/' . $my_debate['id'],
                               $my_debate['topic']);
@@ -67,6 +74,20 @@
           </div>
           <div class="body">
             <?php echo $my_debate['description'];?>
+          </div>
+          <div class="row footer">
+            <div class="span2"><i class="icon-signal"></i> <?php echo $my_debate['score'];?> points</div>
+            <?php if ($me): ?>
+            <div class="span2 delete-debate pointer"><i class="icon-remove"></i> Remove</div>
+            <?php endif; ?>
+            <div class="span3"><i class="icon-user"></i>
+            <?php
+              echo anchor('user/home/' . $my_debate['creator_fbid'],
+                          $my_debate['creator_fbid'],
+                          array('class' =>  'resolve', 'title' =>  'Creator'));
+            ?>
+            </div>
+            
           </div>
         </div>
         <?php endforeach; ?>

@@ -18,7 +18,9 @@ class User extends CI_Controller {
    */
   public function index() {
     $fb = $this->session->userdata('fb');
-    if ($fb['me'] and $fb['fbid']) {
+    $signed_in = ($fb['me'] != null) and $fb['fbid'];
+    
+    if ($signed_in) {
       redirect('user/home');
     } else {
       echo 'You are not logged in!';
@@ -40,6 +42,9 @@ class User extends CI_Controller {
       /* signed in and asking for own page */
       $id = $fb['me']['id'];
     }
+    $data['loginUrl'] = $fb['loginUrl'];
+    $data['signed_in'] = $signed_in;
+    
     if ($use_fb === "0") {
       $user = $this->user_model->get_by_fbid($id);
     } else if ($use_fb === "1") {
@@ -47,24 +52,32 @@ class User extends CI_Controller {
     } else {
       $user = $this->user_model->get_by_uid($id);
     }
+    
+    
     if (empty($user)) {
       if ($signed_in) { /* add entry to the db */
         $user = $this->user_model->add_user($fb);
         
+        $data['interests'] = array();
+        $data['followers'] = array();
+        $data['followees'] = array();
+        $data['my_debates'] = array();
+    
       } else {
         redirect('user/index');
       }
+    } else {
+      $data['interests'] = $this->user_model->get_interests($user['id']);
+      $data['followers'] = $this->user_model->get_followers($user['fbid']);
+      $data['followees'] = $this->user_model->get_followees($user['fbid']);
+      $data['my_debates'] = $this->debate_model->get_debates_followed_by($user['fbid']);
     }
-    $data['interests'] = $this->user_model->get_interests($user['id']);
-    $data['followers'] = $this->user_model->get_followers($user['fbid']);
-    $data['followees'] = $this->user_model->get_followees($user['fbid']);
-    $data['my_debates'] = $this->debate_model->get_debates_followed_by($user['fbid']);
+    
     $data['myfbid'] = $fb['fbid'];
     $data['name'] = $user['name'];
+    $this->load->view('templates/prologue', $data);
+    $this->load->view('templates/header', $data);
     
-    $data['fb'] = $fb;
-    $data['loginUrl'] = $fb['loginUrl'];
-    $data['signed_in'] = $signed_in;
     $data['me'] = ($signed_in and ($fb['fbid'] === $user['fbid']));
     $data['myname'] = $data['me'] ? 'My' : $data['name'] . "'s";
     $data['user_profile'] = $user;
@@ -78,8 +91,7 @@ class User extends CI_Controller {
     }
     
     $data['updates'] = array(array('heading' => 'update heading', 'body' => 'body'));
-    $this->load->view('templates/prologue', $data);
-    $this->load->view('templates/header', $data);
+    
     $this->load->view('user/home', $data);
     $this->load->view('user/home_js');
     $this->load->view('templates/footer', $data);
@@ -102,7 +114,7 @@ class User extends CI_Controller {
     $followee = $this->input->get('followee');
     $fb = $this->session->userdata('fb');
     if ($fb['fbid'] === $follower and $follower and $followee) {
-      $this->user_model->rem_follower($follower, $followee);
+      $this->user_model->unset_follower($follower, $followee);
     }
   }
   

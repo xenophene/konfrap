@@ -17,6 +17,8 @@ class Contact extends CI_Controller {
     $fb = $this->session->userdata('fb');
     $data['signed_in'] = ($fb['me'] != null) and $fb['fbid'];
     $data['name'] = 'Join Us';
+		$data['loginUrl'] = $fb['loginUrl'];
+		
     $this->load->view('templates/prologue', $data);
     $this->load->view('templates/header', $data);
     $this->load->view('contact/join_us');
@@ -28,6 +30,8 @@ class Contact extends CI_Controller {
     $fb = $this->session->userdata('fb');
     $data['signed_in'] = ($fb['me'] != null) and $fb['fbid'];
     $data['name'] = 'About';
+		$data['loginUrl'] = $fb['loginUrl'];
+		
     $this->load->view('templates/prologue', $data);
     $this->load->view('templates/header', $data);
     $this->load->view('contact/about');
@@ -46,6 +50,8 @@ class Contact extends CI_Controller {
 		
     $data['signed_in'] = ($fb['me'] != null) and $fb['fbid'];
     $data['name'] = 'Feedback';
+		$data['loginUrl'] = $fb['loginUrl'];
+		
     $this->load->view('templates/prologue', $data);
     $this->load->view('templates/header', $data);
 		$this->load->view('contact/feedback');

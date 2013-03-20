@@ -6,6 +6,7 @@ class Debate extends CI_Controller {
     $this->load->model('facebook_model');
     $this->load->model('user_model');
     $this->load->model('debate_model');
+    $this->load->model('update_model');
     $this->load->helper('url');
     $this->load->helper('html');
   }
@@ -27,6 +28,7 @@ class Debate extends CI_Controller {
       $id = $this->debate_model->create_debate($debate_topic, $debate_description,
                                          $fb['fbid'], $debate_themes,
                                          $participant_ids);
+      
       echo $id;
     } else {
       echo '0';

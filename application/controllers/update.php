@@ -14,7 +14,7 @@ class Update extends CI_Controller{
 /* Creates update of the type and return the id if successful
  */
 
-	public function create(){
+	public function create($fb, $target, $type){
 		$fb = $this->session->userdata('fb');
 		$target = $this->post('target');
 		$type = $this->post('type');

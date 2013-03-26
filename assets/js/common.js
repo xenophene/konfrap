@@ -28,28 +28,18 @@ function keyValueString(obj) {
 }
 
 /* Set up the user search functionality by querying through AJAX the user base */
-function setUpSearch(data) {
+k.setUpSearch = function (data) {
   for (var i = 0; i < data.length; i++) {
     var x = data[i];
     names.push($.trim(x.name));
     ids.push(x.id);
     searchtypes.push(x.ltype);
   }
+  $('.navbar-search').removeClass('hide');
+  $('.icon-search').removeClass('hide');
   $('#friend-search').typeahead({
     source: names,
     items: 5
-  });
-}
-function searchSetup() {
-  $.ajax({
-    url: '/konfrap/user/all',
-    dataType: 'json',
-    success: setUpSearch
-  });
-  $.ajax({
-    url: '/konfrap/debate/all',
-    dataType: 'json',
-    success: setUpSearch
   });
   $('#friend-search').keypress(function(evt) {
     if (evt.which != 13) return true;
@@ -75,6 +65,18 @@ function searchSetup() {
     else $(this).parent().children('input').val('');
   });
 }
+function searchSetup() {
+  $.ajax({
+    url: '/konfrap/user/all',
+    dataType: 'json',
+    success: k.setUpSearch
+  });
+  $.ajax({
+    url: '/konfrap/debate/all',
+    dataType: 'json',
+    success: k.setUpSearch
+  });
+}
 
 function renderOverlay(id, heading, code) {
   $(id + ' .modal-header h1').html(heading);
@@ -85,11 +87,11 @@ function renderOverlay(id, heading, code) {
   }
   
   $(id + ' li a img').each(function () {
-    nameFromId($(this), $(this).parent().parent().attr('id'));
+    k.nameFromId($(this), $(this).parent().parent().attr('id'));
   });
   $(id).modal('show');
 }
-function resolveIds() {
+k.resolveIds = function () {
   $('.resolve').each(function () {
     var elt = $(this);
     $.ajax({
@@ -101,7 +103,7 @@ function resolveIds() {
     });
   });
 }
-function nameFromId(elmt, fbid) {
+k.nameFromId = function (elmt, fbid) {
   $.ajax({
     url: 'https://graph.facebook.com/' + fbid,
     dataType: 'json',
@@ -116,7 +118,7 @@ function validateEmail(email) {
     return re.test(email);
 }
 
-function init() {
+k.init = function () {
   $.ajax({
     url: '/konfrap/user/my_friends',
     dataType: 'json',
@@ -134,6 +136,10 @@ function init() {
       }
     }
   });
+  searchSetup();
+}
+k.ready = function() {
+  k.resolveIds();
 }
 function showLoadingModal() {
   var loadingImg = '<img src="/konfrap/assets/img/loading3.gif">';
@@ -160,8 +166,7 @@ k.showConnections = function (evt) {
 };
 
 $(function () {
-  searchSetup();
-  resolveIds();
+  k.ready();
   $('.tip').each(function() {$(this).tooltip(); });
 });
-init();
+k.init();

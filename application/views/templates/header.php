@@ -3,9 +3,9 @@
   <span class="search">
     <ul class="header-ul">
       <li class="search-form ui-front">
-        <input class="navbar-search" type="text" id="friend-search"
+        <input class="navbar-search hide" type="text" id="friend-search"
                data-provide="typeahead" placeholder="Search" autocomplete="off"/>
-        <div class="icon-search icon-black"></div>
+        <div class="icon-search icon-black hide"></div>
       </li>
     </ul>
   </span>

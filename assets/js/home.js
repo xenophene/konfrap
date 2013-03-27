@@ -4,7 +4,7 @@
   * Debate topic, Debate description, Debate themes, Context links/urls, Friends
   * who are challenged for or against this debate, the debate deadline
   */
-function setUpTypeahead() {
+k.setUpTypeahead = function() {
 	$('#participants').tagit({
 		removeConfirmation: true,
 		allowSpaces: true,
@@ -22,8 +22,8 @@ function setUpTypeahead() {
 	$('#overlay').modal('hide');
 	$('#start-debate-form').modal('show');
 }
-function defineDebate() {
-	clearDebateForm();
+k.defineDebate = function () {
+	k.clearDebateForm();
   $( "#debate-theme" ).tagit({
     removeConfirmation: true,
 		allowSpaces: true,
@@ -54,11 +54,11 @@ function defineDebate() {
 					friendIds[uname] = ufbid;
 					friendNames.push(uname);
 				}
-				setUpTypeahead();
+				k.setUpTypeahead();
       }
     });
   } else {
-		setUpTypeahead();
+		k.setUpTypeahead();
   }
 }
 
@@ -106,18 +106,18 @@ $('#start-debate-form form').submit(function() {
 });
 
 /* subset of defineDebate for a TARGETTED debate*/
-function defineChallengeDebate() {
-  defineDebate();
+k.defineChallengeDebate = function () {
+  k.defineDebate();
 	$('#participants').tagit('createTag', $('tr td.name').html());
 }
-function clearDebateForm() {
+k.clearDebateForm = function () {
   $('#debate-topic').val('');
   $('#debate-desc').val('');
   $('#debate-theme').tagit('removeAll');
   $('#participants').tagit('removeAll');
 }
 /* Follow this user, toggling the state/css, to unfollow and follow */
-function auxFollowUser(elmt, oldClassName, newClassName, fCode, htmlCode) {
+k.auxFollowUser = function (elmt, oldClassName, newClassName, fCode, htmlCode) {
   elmt.removeClass(oldClassName);
   elmt.addClass(newClassName);
   elmt.html(htmlCode);
@@ -134,18 +134,18 @@ function auxFollowUser(elmt, oldClassName, newClassName, fCode, htmlCode) {
 		}
   });
 }
-function followUser () {
+k.followUser = function() {
   if ($(this).hasClass('btn-primary')) {
-    auxFollowUser($(this), 'btn-primary', 'btn-danger', 'follow', 'Unfollow');
+    k.auxFollowUser($(this), 'btn-primary', 'btn-danger', 'follow', 'Unfollow');
   }
   else {
-    auxFollowUser($(this), 'btn-danger', 'btn-primary', 'unfollow', 'Follow');
+    k.auxFollowUser($(this), 'btn-danger', 'btn-primary', 'unfollow', 'Follow');
   }
 }
 
 
 /* delete Debate will take the debate and remove myself from the participant list */
-function debateDelete() {
+k.debateDelete = function () {
   var debid = $(this).parent().parent().attr('id');
   $.ajax({
     url: '/konfrap/debate/unfollow',
@@ -155,108 +155,16 @@ function debateDelete() {
       follower: myfbid
     }
   });
-  $(this).parent().parent().fadeOut();
-  $(this).parent().parent().remove();
+  $(this).parent().parent().slideUp().remove();
 }
 
 /* clear Overlay */
-function clearOverlay() {
+k.clearOverlay = function () {
   $('.window').hide();
   $('#mask').hide();
 }
 
-/* show my connections */
-function showConnections(evt) {
-  var pids = evt.data.p == 1 ? followers : followees;
-  var heading = evt.data.p == 1 ? 'Followers' : 'Followees';
-  if (!pids.length) return;
-  var n = pids.length;
-  var code = '<ul>';
-  for (var i = 0; i < n; i++) {
-    code += '<li id="' + pids[i] + '"><a target="_blank" href="/konfrap/user/home/' +
-	  pids[i] + '"><img id="' + pids[i] + '" src="https://graph.facebook.com/' +
-	  pids[i] + '/picture"/></a></li>';
-  }
-  code += '</ul>';
-  var id = '#overlay';
-  renderOverlay(id, heading, code);
-}
-
-function popovers() {
-  $('.debate-table').popover({
-    title: 'The Debate Table',
-    content: 'View performance on ongoing & past debates'
-  });
-  $('#interested-in').popover({
-    title: 'Interested In',
-    content: 'All the debating themes you are interested to debate in.'
-  });
-  $('#debating-points').popover({
-    title: 'Debating Points',
-    content: 'Debating Points accumulated over time by winning valuable debates. The points for a debate result from the popularity that the debate garners over time. When a debate gets over, the points it had get distributed among its participants. The more votes a comment got, the more points its author gets at the end.'
-  });
-  $('#debates-won').popover({
-    title: 'Debates Won',
-    content: 'Number of debates won over time.'
-  });
-  $('#modify-profile').popover({
-    title: 'Modify Profile',
-    content: 'Modify your profile to add debate themes and interests.',
-    placement: 'bottom'
-  });
-  $('#debate-topic').popover({
-    content: 'Enter the debate topic'
-  });
-  $('#debate-desc').popover({
-    content: 'Give some optional description to motivate the need to debate this topic and who all should care for the topic. Provide more context to the debate by providing external URLs giving it a defined direction.'
-  });
-  $('#debate-theme').popover({
-    content: 'Enter one or more of the predefined categories that this debate falls under'
-  });
-  $('#participants').popover({
-    content: 'Invite your friends who would be most interested to express their views on this topic'
-  });
-  $('#radio').popover({
-    content: 'Set a time limit for this debate after which no participant will be able to make further comments.'
-  });
-  $('#radio2').popover({
-    content: 'Any debater can participate & comment in a public debate. Private debates require invites from participants.'
-  });
-  $('#invite').popover({
-    content: 'Invite this person to one my ongoing debates',
-    placement: 'left'
-  });
-  $('#follow').popover({
-    content: "Follow this person's debates and activity",
-    placement: 'left'
-  });
-	$('#challenge').popover({
-    content: "Challenge this person to a new debate",
-    placement: 'left'
-  });
-  $('#post-to-fb').tooltip();
-  $('.add').tooltip({
-    title: 'Modify/Add Debating interests'
-  });
-  $('.delete-debate').tooltip({
-    title: 'Remove myself as a participant',
-    placement: 'left'
-  });
-}
-
-function postFb() {
-  $(this).toggleClass('active');
-  if ($('#post-to-fb-input').val() == '0') {
-    $('#post-to-fb-input').val('1');
-    $(this).html('This debate will be posted on Facebook');
-  }
-  else {
-    $('#post-to-fb-input').val('0');
-    $(this).html('Post this debate on to Facebook');
-  }
-}
-
-function setUpInterests() {
+k.setUpInterests = function () {
 	$('#interest-tags').tagit({
 		readOnly: ufbid !== myfbid,
 		removeConfirmation: true,
@@ -294,12 +202,12 @@ function setUpInterests() {
 	});
 }
 $(function() {
-  clearDebateForm();
-  $('#start').click(defineDebate);
-  $('#start-debate-form').on('hidden', clearDebateForm);
-  $('#challenge').click(defineChallengeDebate);
-  $('#follow').click(followUser);
-  $('.delete-debate').click(debateDelete);
+  k.clearDebateForm();
+  $('#start').click(k.defineDebate);
+  $('#start-debate-form').on('hidden', k.clearDebateForm);
+  $('#challenge').click(k.defineChallengeDebate);
+  $('#follow').click(k.followUser);
+  $('.delete-debate').click(k.debateDelete);
 	
   $('#my-followers').click({
 			text: 'Followers',
@@ -311,5 +219,5 @@ $(function() {
 			ids: followees
 		}, k.showConnections
 	);
-	setUpInterests();
+	k.setUpInterests();
 });

@@ -123,6 +123,9 @@ k.init = function () {
     url: '/konfrap/user/my_friends',
     dataType: 'json',
     success: function(result) {
+      if (!result) {
+        return;
+      }
       friendNames = [],
       friendIds = {};
       for (var i = 0; i < result.data.length; i++) {

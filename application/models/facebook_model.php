@@ -3,8 +3,13 @@
 class Facebook_model extends CI_Model {
   public function __construct() {
     parent::__construct();
-    $user = $this->facebook->getUser();
     
+    $fb_session = $this->session->userdata('fb');
+    if ($fb_session && $fb_session['me'] && $fb_session['fbid']) {
+      return;
+    }
+    
+    $user = $this->facebook->getUser();
     $user_profile = null;
     
     if ($user) {

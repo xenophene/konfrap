@@ -140,4 +140,19 @@ class Debate extends CI_Controller {
     
     $this->debate_model->set_follower($id, $follower_fbid);
   }
+  
+  public function parse_page($page_url) {
+    //echo "asdas";
+    //$page_url = $this->input->post('url');
+    //$page_url = "http://www.thehindu.com/opinion/lead/the-silent-war-over-education-reforms/article4570580.ece";
+    $page_url = "http://localhost/iitdebates/page.html";
+    $html= $this->debate_model->parse_page($page_url);
+    
+    
+
+ 
+    //echo $html; 
+    //echo  $summary;
+  }
+
 }

@@ -55,6 +55,7 @@ $route['debate/invite_friends'] = 'debate/invite_friends';
 $route['debate/unfollow'] = 'debate/unfollow';
 $route['debate/follow'] = 'debate/follow';
 $route['debate/edit_field'] = 'debate/edit_field';
+$route['debate/parse_page/(:any)'] = 'debate/parse_page/$1';
 $route['debate/(:any)'] = 'debate/index/$1';
 
 $route['contact/feedback'] = 'contact/feedback';

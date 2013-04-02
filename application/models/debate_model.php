@@ -174,4 +174,31 @@ class Debate_model extends CI_Model {
     
     $query = $this->db->delete('debate_followers', $data);
   }
+  
+  public function parse_page($url){
+    //$this->load->library("simple_html_dom");
+    include('simple_html_dom.php');
+    //$html = $this->simple_html_dom->file_get_html($url);
+    $html = file_get_html($url);
+    
+    foreach($html->find('title') as $e)
+    echo $e . '<br>';
+    
+    foreach($html->find('.cat a') as $e){
+      echo $e->plaintext . '<br>';
+    }
+    
+    
+    
+    foreach($html->find('.articleLead h2' ) as $e)
+    echo $e->plaintext . '<br>';
+    
+    foreach($html->find('.body' ) as $e)
+    echo $e->innertext . '<br>';
+    
+    foreach($html->find('div#articleKeywords') as $e)
+    echo $e->plaintext . '<br>';
+ 
+    return null;
+  }
 }

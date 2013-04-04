@@ -1,3 +1,6 @@
 RewriteEngine on
 RewriteCond $1 !^(index\.php|assets|user\_guide|robots\.txt)
 RewriteRule ^(.*)$ index.php/$1 [L]
+#<FilesMatch "\.(css|js|png)$">
+#Header set Cache-Control "max-age=172800, public, must-revalidate"
+#</FilesMatch>

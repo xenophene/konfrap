@@ -158,7 +158,7 @@ k.showConnections = function (evt) {
       n = pids.length;
       
   for (var i = 0; i < pids.length; i++) {
-    code += '<li id="' + pids[i] + '"><a target="_blank" href="home.php?fbid=' + 
+    code += '<li id="' + pids[i] + '"><a target="_blank" href="/konfrap/user/home/' +
             pids[i] + '"><img id="' + pids[i] + '" src="https://graph.facebook.com/' + 
             pids[i] + '/picture"/></a></li>';
   }

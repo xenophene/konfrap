@@ -35,6 +35,7 @@ class User extends CI_Controller {
   public function home($id = null, $use_fb = "0") {
     $fb = $this->session->userdata('fb');
     $signed_in = ($fb['me'] != null) and $fb['fbid'];
+    
     if ( ! $signed_in and $id === null) {
       /* neither signed in nor asking for a user - REDIRECT */
       redirect('user/index');
@@ -44,7 +45,6 @@ class User extends CI_Controller {
     }
     $data['loginUrl'] = $fb['loginUrl'];
     $data['signed_in'] = $signed_in;
-    
     if ($use_fb === "0") {
       $user = $this->user_model->get_by_fbid($id);
     } else if ($use_fb === "1") {
@@ -52,7 +52,10 @@ class User extends CI_Controller {
     } else {
       $user = $this->user_model->get_by_uid($id);
     }
-    
+    // problem when, querying a user not in the db
+    if ($id and empty($user)) {
+      redirect('user/home');
+    }
     
     if (empty($user)) {
       if ($signed_in) { /* add entry to the db */

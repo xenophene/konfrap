@@ -72,6 +72,7 @@ class Debate extends CI_Controller {
     $data['time'] = date('j F Y', $time);
     
     $this->load->view('debate/debate', $data);
+    $this->load->view('debate/debate_graph');
     
     $data['myfbid'] = $fb['fbid'];
     $this->load->view('debate/debate_js', $data);

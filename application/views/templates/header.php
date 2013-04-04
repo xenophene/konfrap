@@ -1,4 +1,4 @@
-<div id="header">
+<div id="header" class="row-fluid">
   <span class="logo"><?php echo anchor('user', 'konϝrap');?></span>
   <span class="search">
     <ul class="header-ul">
@@ -27,3 +27,4 @@
     </ul>
   </span>
 </div>
+<div id="main">

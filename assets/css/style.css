@@ -95,11 +95,13 @@ span.emph {
   padding: 0 100px 0 100px;
 }
 #prominent {
+  margin-bottom: 10px;
   padding: 20px 0 20px 0;
   clear: both;
   overflow: auto;
   border-bottom: 1px solid #eee;
   position: relative;
+  min-height: 140px;
 }
 td.name {
   font-weight: bold;
@@ -209,21 +211,24 @@ ul {
 }
 .outline {
   border: solid 1px #aaa;
+  margin-bottom: 5px !important;
 }
 .tag-elements {
   padding: 0 8px 0 0;
-  max-width: 400px;
+  max-width: 500px;
   margin: 0;
 }
 .feed-list {
   position: relative;
   width: 800px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #efefef;
 }
 .feed-block {
   padding: 10px 0 5px 0;
   margin: 0;
   font-size: 13px;
-  border-bottom: 1px solid #efefef;
 }
 .feed-block .heading {
   font-weight: bold;
@@ -338,7 +343,11 @@ form {
 textarea {
   resize: none;
 }
-.input-xxlarge{width:520px;}
+.input-xxlarge{width:600px;}
+.start-debate-tags {
+  width: 600px;
+  padding: 1px 4px;
+}
 .input-xlarge{width:420px;}
 .clear {
   clear: both;
@@ -390,7 +399,7 @@ textarea {
   text-align: center;
   margin: 200px 0 0 0 auto;
 }
-.btn-custom {
+.btn-konfrap {
   background-color: hsl(211, 27%, 11%) !important;
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#415871", endColorstr="#141b23");
@@ -405,4 +414,12 @@ textarea {
   color: #fff !important;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.39);
   -webkit-font-smoothing: antialiased;
+}
+
+#debate-graph {
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border: solid 1px #eee;
+  height: 500px;
 }

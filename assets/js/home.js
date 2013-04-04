@@ -1,9 +1,3 @@
-/**
-  * Defines a debate on a user clicking start a new debate. This function
-  * is the base function. The parameters which are requested:
-  * Debate topic, Debate description, Debate themes, Context links/urls, Friends
-  * who are challenged for or against this debate, the debate deadline
-  */
 k.setUpTypeahead = function() {
 	$('#participants').tagit({
 		removeConfirmation: true,
@@ -19,8 +13,12 @@ k.setUpTypeahead = function() {
 			minLength: 2
 		}
 	});
-	$('#overlay').modal('hide');
-	$('#start-debate-form').modal('show');
+	$('#participants').removeClass('hide');
+	if (myfbid !== ufbid) {
+		$('#participants').tagit('createTag', $('tr td.name').html());
+	}
+	$('#start-loading').addClass('hide');
+	$('#start-debate').removeClass('hide');
 }
 k.defineDebate = function () {
 	k.clearDebateForm();
@@ -39,11 +37,15 @@ k.defineDebate = function () {
 		}
   });
   if (friendNames == null) {
-		showLoadingModal();
     $.ajax({
       url: '/konfrap/user/my_friends',
       dataType: 'json',
       success: function(result) {
+				if (!result || !result.data) {
+					$('#debate-error').removeClass('hide');
+					$('#start-loading').addClass('hide');
+					return;
+				}
         friendNames = [],
         friendIds = {};
         for (var i = 0; i < result.data.length; i++) {
@@ -61,12 +63,11 @@ k.defineDebate = function () {
 		k.setUpTypeahead();
   }
 }
-
 $('#start-debate-form form').submit(function() {
 	var participants = $('#participants').tagit('assignedTags');
   var indexes = [];
 	participants.map(function (e) {
-			indexes.push(friendIds[e]);
+		indexes.push(friendIds[e]);
 	});
   $('#debate-desc').val($('#debate-desc').val().replace(/(^,)|(,$)/g, ""));
   $('#participants-names').val(participants.join());
@@ -89,10 +90,10 @@ $('#start-debate-form form').submit(function() {
 			'myfbid': myfbid
     },
     success: function (data) {
-			
       if (data === "0") {
-				console.log('something bad happened!');
-				$('#start-debate-form').modal('hide');
+				$('#debate-error').removeClass('hide');
+				$('#start-loading').addClass('hide');
+				k.clearDebateForm();
 			} else {
 				window.location = '/konfrap/debate/' + data;
 			}
@@ -101,14 +102,14 @@ $('#start-debate-form form').submit(function() {
       console.log(msg);
     }
   });
-  $('#start-loading').toggle();
+  $('#start-loading').removeClass('hide');
   return false;
 });
 
 /* subset of defineDebate for a TARGETTED debate*/
 k.defineChallengeDebate = function () {
   k.defineDebate();
-	$('#participants').tagit('createTag', $('tr td.name').html());
+	
 }
 k.clearDebateForm = function () {
   $('#debate-topic').val('');
@@ -203,10 +204,11 @@ k.setUpInterests = function () {
 }
 $(function() {
   k.clearDebateForm();
-  $('#start').click(k.defineDebate);
-  $('#start-debate-form').on('hidden', k.clearDebateForm);
-  $('#challenge').click(k.defineChallengeDebate);
-  $('#follow').click(k.followUser);
+  //$('#start').click(k.defineDebate);
+  //$('#start-debate-form').on('hidden', k.clearDebateForm);
+  //$('#challenge').click(k.defineChallengeDebate);
+  
+	$('#follow').click(k.followUser);
   $('.delete-debate').click(k.debateDelete);
 	
   $('#my-followers').click({
@@ -220,4 +222,5 @@ $(function() {
 		}, k.showConnections
 	);
 	k.setUpInterests();
+	k.defineDebate();
 });

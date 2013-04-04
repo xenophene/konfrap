@@ -1,3 +1,4 @@
+</div>
 <script>
   <?php echo "
       var myfbid = '$myfbid';

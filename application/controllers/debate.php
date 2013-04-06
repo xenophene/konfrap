@@ -22,8 +22,7 @@ class Debate extends CI_Controller {
     $debate_themes = explode(',', $this->input->post('debate-themes'));
     $participant_ids = explode(',', $this->input->post('participant-ids'));
     $claimed_fbid = $this->input->post('myfbid');
-    if ($fb['fbid'] and $claimed_fbid === $fb['fbid'] and $debate_topic !== ''
-        and $debate_description !== '') {
+    if ($fb['fbid'] and $claimed_fbid === $fb['fbid'] and $debate_topic !== '') {
       $id = $this->debate_model->create_debate($debate_topic, $debate_description,
                                          $fb['fbid'], $debate_themes,
                                          $participant_ids);

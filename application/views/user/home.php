@@ -123,7 +123,7 @@
         <input type="hidden" name="participant-ids" title="Debate's Participants"
                id="participant-ids"/>
         <span id="debate-error" class="error hide">
-          An error occured! Please refresh and try again.
+          My lord, be a sport and fill all the relevant details!
         </span><br/>
         <img src="/konfrap/assets/img/loading3.gif" alt="Loading"
              id="start-loading" title="Loading"/>

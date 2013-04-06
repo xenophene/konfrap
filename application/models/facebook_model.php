@@ -16,6 +16,7 @@ class Facebook_model extends CI_Model {
       try {
         $user_profile = $this->facebook->api('/me');
       } catch (FacebookApiException $e) {
+        $this->facebook->destroySession();
         $user = null;
       }
     }

@@ -175,30 +175,133 @@ class Debate_model extends CI_Model {
     $query = $this->db->delete('debate_followers', $data);
   }
   
-  public function parse_page($url){
-    //$this->load->library("simple_html_dom");
+  
+  
+  
+  public function get_debate_from_source($url){
     include('simple_html_dom.php');
-    //$html = $this->simple_html_dom->file_get_html($url);
     $html = file_get_html($url);
+        
+    $source = "";
+    $tags ="";
+    $debate_title ="";
+    $debate_desc = "";
+    $debate_article ="";
+    $key_words ="";
     
-    foreach($html->find('title') as $e)
-    echo $e . '<br>';
+    if(strpos($url,"thehindu")!==False){
+        $source = "thehindu";
+        
+        foreach($html->find('.cat a') as $e){
+          $tags = $e->plaintext.",".$tags;
+        }
+        
+        foreach($html->find('.detail-title' ) as $e){
+          $debate_title = $e->plaintext ;
+        }
+        
+        foreach($html->find('.articleLead h2' ) as $e){
+          $debate_desc = $e->plaintext ;
+        }
+        
+        
+        foreach($html->find('.body' ) as $e){
+          $debate_article = $debate_article.$e->plaintext;
+        }
+        
+        $debate_article = preg_replace('/[^(\x20-\x7F)]*/','', $debate_article);
+        
+        foreach($html->find('div#articleKeywords') as $e){
+          $key_words = $e->plaintext;
+        }
+       
+
+        }
+    else if(strpos($url,"indianexpress")!==False){
+        $source = "indianexpress";
+        
+        foreach($html->find('.tags2013 a') as $e){
+          $tags = $e->plaintext.",".$tags;
+        }
+        
+        foreach($html->find('title' ) as $e){
+          $debate_title = $e->plaintext ;
+        }
+        
+        //No Summary in the indian express articles
+        
+        //foreach($html->find('.articleLead h2' ) as $e){
+        //  $debate_desc = $e->plaintext ;
+        //}
+        
+        foreach($html->find('p' ) as $e){
+          $debate_article = $debate_article.$e->plaintext;
+        }
+        
+        $debate_article = preg_replace('/[^(\x20-\x7F)]*/','', $debate_article);
+        
+        //foreach($html->find('div#articleKeywords') as $e){
+        //  $key_words = $e->plaintext;
+        //}
+       
+
+        }
+        
+    else if(strpos($url,"ndtv")===False){
+        $source = "ndtv";
+        
+        foreach($html->find('.storytags a') as $e){
+          $tags = $e->plaintext.",".$tags;
+        }
+        
+        foreach($html->find('title' ) as $e){
+          $debate_title = $e->plaintext ;
+        }
+        
+        //No Summary in the ndtv
+        
+        //foreach($html->find('.articleLead h2' ) as $e){
+        //  $debate_desc = $e->plaintext ;
+        //}
+        
+        foreach($html->find('div#storycontent' ) as $e){
+          $debate_article = $debate_article.$e->plaintext;
+        }
+        
+        $debate_article = preg_replace('/[^(\x20-\x7F)]*/','', $debate_article);
+        
+        //foreach($html->find('div#articleKeywords') as $e){
+        //  $key_words = $e->plaintext;
+        //}
+       
+
+        }    
+        
+    /*
+    debate_desc can be empty if the summary is not in the news source
+    debate_article has the full text article,WHICH CAN BE USED if above is empty
+    key_wrods can be empty
+    */    
+        
+    $data = array(
+                  "source" =>$source,
+                  "tags"   =>$tags,
+                  "debate_title" => $debate_title,
+                  "debate_desc"  => $debate_desc,
+                  "debate_article" => $debate_article,
+                  "key_words"      => $key_words
+                  );    
+        
+    return $data;
     
-    foreach($html->find('.cat a') as $e){
-      echo $e->plaintext . '<br>';
     }
-    
-    
-    
-    foreach($html->find('.articleLead h2' ) as $e)
-    echo $e->plaintext . '<br>';
-    
-    foreach($html->find('.body' ) as $e)
-    echo $e->innertext . '<br>';
-    
-    foreach($html->find('div#articleKeywords') as $e)
-    echo $e->plaintext . '<br>';
+  
+  public function parse_page($url){
  
-    return null;
+    $data = $this->get_debate_from_source($url);
+    return $data;
+  
   }
+  
+
 }

@@ -5,6 +5,9 @@ class Debate extends CI_Controller {
     parent::__construct();
     $this->load->model('facebook_model');
     $this->load->model('user_model');
+    $this->load->model('debate_model');
+    $this->load->model('update_model');
+    
     $this->load->helper('url');
     $this->load->helper('html');
   }
@@ -26,6 +29,7 @@ class Debate extends CI_Controller {
                                          $fb['fbid'], $debate_themes,
                                          $participant_ids);
       echo $id;
+      $this->update_model->insert($claimed_fbid, $id, "1");
     } else {
       echo '0';
     }

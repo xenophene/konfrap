@@ -170,5 +170,19 @@ class User_model extends CI_Model {
             );
     $query = $this->db->delete('user_interests', $data);
   }
+ 
+  public function my_friends() {
+  $fb = $this->session->userdata('fb');
+  if ($fb['fbid']) {
+    try {
+      $access_token = $this->facebook->getAccessToken();
+      $friends = $this->facebook->api('/me/friends', 'GET');
+      $farr = array();
+      foreach($friends["data"] as $f)
+        array_push($farr, $f["id"]);
+      return $farr;
+      } catch (FacebookApiException $e) {}
+    }
+  }
   
 }

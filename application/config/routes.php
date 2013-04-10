@@ -57,6 +57,9 @@ $route['debate/follow'] = 'debate/follow';
 $route['debate/edit_field'] = 'debate/edit_field';
 $route['debate/(:any)'] = 'debate/index/$1';
 
+$route['update/all'] = 'update/all';
+$route['update/(:any)'] = 'update/index/$1';
+
 $route['contact/feedback'] = 'contact/feedback';
 $route['contact/join_us'] = 'contact/join_us';
 $route['contact/about'] = 'contact/about';

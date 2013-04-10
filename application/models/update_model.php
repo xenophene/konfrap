@@ -46,7 +46,9 @@ class Update_model extends CI_Model {
 									"type"    => $type
 									);
 		$this->db->insert('updates', $data);
-	}
+		$id = $this->db->insert_id();
+		return $id;
+		}
 	
 	
 }

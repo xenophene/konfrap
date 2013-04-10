@@ -247,7 +247,7 @@ class Debate_model extends CI_Model {
 
         }
         
-    else if(strpos($url,"ndtv")===False){
+    else if(strpos($url,"ndtv")!==False){
         $source = "ndtv";
         
         foreach($html->find('.storytags a') as $e){

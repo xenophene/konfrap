@@ -145,15 +145,17 @@ class Debate extends CI_Controller {
     
     
     
-    /* Experiment with different main stream news Sources.
+    /* Experiment with different main stream news Sources as sample dump at local machine.
     $page_url = "http://www.thehindu.com/opinion/lead/the-silent-war-over-education-reforms/article4570580.ece";
     $page_url = "http://localhost/iitdebates/page.html";
     $page_url = "http://localhost/iitdebates/page1.html";
     $page_url = "http://localhost/iitdebates/page2.html";
     $page_url = "http://localhost/iitdebates/page3.html";          
     */
+    
+    $page_url = "http://localhost/iitdebates/page.html";
     //$page_url = $this->input->post('url');
-    $page_url = "http://localhost/iitdebates/page5.html";
+    
     $data= $this->debate_model->parse_page($page_url);
     print_r($data);
     

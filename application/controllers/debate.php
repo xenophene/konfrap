@@ -5,7 +5,6 @@ class Debate extends CI_Controller {
     parent::__construct();
     $this->load->model('facebook_model');
     $this->load->model('user_model');
-    $this->load->model('debate_model');
     $this->load->helper('url');
     $this->load->helper('html');
   }

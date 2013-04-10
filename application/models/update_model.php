@@ -9,15 +9,28 @@ class Update_model extends CI_Model {
 		$query = $this->db->get('updates');
 		return $query->result_array();
 	}
-	/*
-	 *get the relevant updates of the user($uid : FB id)
-	 */
 	
+	/*Get details depending on the type of update and source/target. */
+	public function get_details($type, $id, $arg){
+		if($arg=="source"){
+			return $this->user_model->get_by_fbid($id);
+		}
+		else if($arg=="target"){
+			if($type==3)
+				return $this->user_model->get_by_fbid($id);
+			else
+				return $this->debate_model->get_by_id($id);
+		}
+	}
+		
+	 /*Get the relevant updates of the user($uid : FB id)
+	 */
 	public function get_by_id($fbid){
 		if(!$fbid)
 			return null;
 		else{
 			$friends = $this->user_model->my_friends();
+			$friends = array();
 			$followers = $this->user_model->get_followers($fbid);
 			
 			//$sql = "select * from updates where source IN (100000901607885, 653499724)";
@@ -25,7 +38,30 @@ class Update_model extends CI_Model {
 			$sql = "select * from updates where source IN ".$rels;
 			$query = $this->db->query($sql);
 			$result = $query->result_array();
-			return $result;
+			
+			$updates = array();
+			
+			foreach($result as $feed){
+				$type  = $feed['type'];
+				
+				$d2 = $this->get_details($type, $feed['source'], "source");
+				$d1 = $this->get_details($type, $feed['target'], "target");
+				
+				$data = array(
+											"source" => $d1,
+											"target" =>	$d2
+											);
+				
+				$f = array(
+									 "timestamp" => $feed['timestamp'],
+									 "type"	=> $feed['type'],
+									 "data" => $data
+									 );
+				
+				array_push($updates, $f);
+				
+			}
+			return $updates;
 			
 		}
 	}

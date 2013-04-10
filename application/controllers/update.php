@@ -13,12 +13,10 @@ class Update extends CI_Controller{
 
 	}
 	public function index($id=FALSE){
-		$updates = $this->update_model->get_all();
- 		if(!$id)
-			return $updates;
-		else{
-			
+		return $this->update_model->get_by_uid();
 		}
+	
+	
 	}
 
 

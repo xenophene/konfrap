@@ -282,8 +282,6 @@ ul {
   text-decoration: underline;
 }
 
-#radio, #radio2 {
-}
 p.emph {
   font-size: 20px;
   margin: 0px;
@@ -302,6 +300,7 @@ textarea {
   width: 600px;
   padding: 1px 4px;
 }
+.input-large{width:350px;}
 .input-xlarge{width:420px;}
 .clear {
   clear: both;
@@ -381,18 +380,25 @@ textarea {
 #debate-control {
   padding: 10px;
 }
-#debate-control .bio a {
+#debate-control #author {
   font-weight: bold;
   font-size: 14px;
 }
-#debate-control .bio .side, #debate-control .bio .score {
+#debate-control .info  {
   font-size: 12px;
   font-style: italic;
   color: #777;
+  padding: 0 5px 0 0px;
 }
 #debate-control .comment {
   margin-top: 5px;
   max-height: 450px;
   overflow-y: auto;
   color: #444;
+}
+.votes {
+  border-right: solid 1px #aaa; 
+}
+.upvote, .downvote, .support-point, .rebutt-point, .delete-point, .votes, .comment-date {
+  cursor: pointer;
 }

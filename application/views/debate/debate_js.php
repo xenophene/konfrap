@@ -13,6 +13,8 @@
 <script src="/konfrap/assets/js/bootstrap.min.js"></script>
 <script src="/konfrap/assets/js/jquery-ui-min.js"></script>
 <script src="/konfrap/assets/js/bootstrap-editable.min.js"></script>
+<script src="/konfrap/assets/js/underscore.min.js"></script>
+<script src="/konfrap/assets/js/backbone.min.js"></script>
 <script src="/konfrap/assets/js/d3.v3.js"></script>
 <script src="/konfrap/assets/js/tag-it-min.js"></script>
 <script src="/konfrap/assets/js/common.js"></script>

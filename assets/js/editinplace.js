@@ -1,5 +1,3 @@
-
-
 $(document).ready(function(){
 /*inPlaceEditing of debate description and save the new value.*/
 	
